@@ -4,8 +4,8 @@ class Bullet{
         this.speed = 10.0
         this.x = x
         this.y = y
-        this.width = 5
-        this.height = 5
+        this.width = 2.5
+        this.height = 2.5
     }
 }
 

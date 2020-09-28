@@ -3,6 +3,7 @@ const http = require('http');//helps build webserver
 const path = require('path');
 const socketIO = require('socket.io');//handles websockets on the server
 const Tank = require('./Tank')
+const Bullet = require('./Bullet')
 
 const app = express()
 
@@ -22,12 +23,6 @@ server.listen(3000, ()=>{
 	console.log('Starting server on port 3000')
 })
 
-
-//emits a message every 1 second
-
-setInterval(()=>{ //this is for testing
-	io.sockets.emit('message', 'hi')
-}, 1000/60)
 
 
 //adding websocket handlers
@@ -65,11 +60,46 @@ io.on('connection',(socket)=>{
 			player.turret.theta += player.turret.dTheta
 			player.turret.theta %= 360
 		}
+		if(data.shoot){
+			//we need to add a bullet into the chamber of the turret
+			player.turret.active.push(new Bullet(
+				player.x + player.width/2,
+				player.y + player.height / 2,
+				player.turret.theta+player.theta
+			  ))
+		}
 	})
 })
+
+
+let last = (new Date()).getTime()
+
+setInterval(()=>{
+	let current = (new Date()).getTime()
+	let dT = current - last
+
+	for(id in players){
+		const player = players[id]
+		
+		for(let i = 0 ; i < player.turret.active.length; i++){
+			player.turret.active[i].x += player.turret.active[i].speed*Math.cos(player.turret.active[i].theta *Math.PI/180.0)
+			player.turret.active[i].y += player.turret.active[i].speed*Math.sin(player.turret.active[i].theta *Math.PI/180.0)
+		}
+
+
+
+	}
+
+	last = current
+
+
+
+}, 1000/60)
 
 setInterval(()=>{
 	io.sockets.emit('state', players)
 }, 1000/60)
-
 //this makes sure that the players are updated 60 times a second (so it's 60 fps)
+
+
+

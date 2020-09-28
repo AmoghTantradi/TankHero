@@ -7,9 +7,7 @@ class Turret {
       this.fire = false;
       this.width = 20;
       this.height = 20;
-      this.lasers = [];
-      this.explosions = [];
-
+      this.active = []
       return;
     }
   

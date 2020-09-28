@@ -1,40 +1,41 @@
 
 const socket = io()
 
-socket.on('message', (data) =>{ //this is getting data from the server
-    console.log(data)
-})
 
-
-const playerMovement = { //json object that represents the player's state of motion
+ const player =  { //json object that represents the player's state of motion
     forward:false,
     back:false,
     turnLeft:false,
     turnRight: false,
     turnTurretLeft: false,
-    turnTurretRight: false
+    turnTurretRight: false,
+    shoot :false
 }
+
 
 document.addEventListener('keydown', (event) => {
 
     switch(event.keyCode){
         case 87:
-            playerMovement.forward = true
+            player.forward = true
             break
         case 83:
-            playerMovement.back = true
+            player.back = true
             break
         case 65:
-            playerMovement.turnLeft = true
+            player.turnLeft = true
             break
         case 68:
-            playerMovement.turnRight = true
+            player.turnRight = true
             break
         case 37:
-            playerMovement.turnTurretLeft = true
+            player.turnTurretLeft = true
             break
         case 39:
-            playerMovement.turnTurretRight = true
+            player.turnTurretRight = true
+            break
+        case 38:
+            player.shoot = true
             break
         default:
             break
@@ -46,23 +47,26 @@ document.addEventListener('keyup', (event) => {
     
     switch(event.keyCode){
         case 87:
-            playerMovement.forward = false
+            player.forward = false
             break
         case 83:
-            playerMovement.back = false
+            player.back = false
             break
         case 65:
-            playerMovement.turnLeft = false
+            player.turnLeft = false
             break
         case 68:
-            playerMovement.turnRight = false
+            player.turnRight = false
             break
         case 37:
-            playerMovement.turnTurretLeft = false
+            player.turnTurretLeft = false
             break
         case 39:
-            playerMovement.turnTurretRight = false
+            player.turnTurretRight = false
             break
+        case 38:
+            player.shoot = false
+            break 
         default:
             break 
     }
@@ -72,7 +76,7 @@ document.addEventListener('keyup', (event) => {
 socket.emit('new player')
 
 setInterval( ()=>{
-    socket.emit('movement', playerMovement);
+    socket.emit('movement', player);
   }, 1000 / 60);
 
 
@@ -86,10 +90,35 @@ socket.on('state', (players) => { //recieves player data from server every 60 se
     for(let id in players){
         let player = players[id]
         //player.draw(ctx)
-        drawPlayerTank(player,ctx)
+        draw(player,ctx)
         console.log('player: ', player)
     }
 })
+
+
+
+
+function drawBullet(bullet,ctx){
+
+    ctx.fillStyle = "red"
+
+    ctx.save()
+
+    ctx.translate(bullet.x+bullet.width/2, bullet.y+bullet.height/2)
+
+
+    ctx.rotate(bullet.theta *(Math.PI/180))
+
+    ctx.fillRect(-bullet.width/2, -bullet.height/2, bullet.width, bullet.height)
+
+    ctx.translate(-(bullet.x+bullet.width/2), -(bullet.y+bullet.height/2))
+
+
+    ctx.restore()
+
+    return
+    
+}
 
 
 function drawPlayerTurret(player, ctx){
@@ -118,3 +147,12 @@ function drawPlayerTank(player,ctx){
     ctx.restore();
 }
 
+function draw(player,ctx){
+
+    drawPlayerTank(player,ctx)
+
+    for(let i = 0 ; i < player.turret.active.length; i++){
+        drawBullet(player.turret.active[i],ctx)
+    }
+    
+}
