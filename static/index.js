@@ -100,7 +100,7 @@ socket.on('state', (players) => { //recieves player data from server every 60 se
 
 function drawBullet(bullet,ctx){
 
-    ctx.fillStyle = "red"
+    ctx.fillStyle = bullet.color
 
     ctx.save()
 
@@ -122,7 +122,7 @@ function drawBullet(bullet,ctx){
 
 
 function drawPlayerTurret(player, ctx){
-    ctx.fillStyle = "green";
+    ctx.fillStyle = player.turret.color;
   
     ctx.rotate(player.turret.theta * (Math.PI / 180));
     ctx.fillRect(-player.turret.width / 2, -player.turret.height / 2, player.turret.width, player.turret.height);
@@ -137,7 +137,7 @@ function drawPlayerTurret(player, ctx){
 }
 
 function drawPlayerTank(player,ctx){
-    ctx.fillStyle = "brown";
+    ctx.fillStyle = player.color;
     ctx.save();
     ctx.translate(player.x + player.width / 2, player.y + player.height / 2);
     ctx.rotate(player.theta * (Math.PI / 180));
@@ -154,5 +154,5 @@ function draw(player,ctx){
     for(let i = 0 ; i < player.turret.active.length; i++){
         drawBullet(player.turret.active[i],ctx)
     }
-    
+      
 }

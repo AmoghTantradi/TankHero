@@ -4,7 +4,7 @@ class Turret {
       this.y = y;
       this.theta = 0;
       this.dTheta = 2.0;
-      this.fire = false;
+      this.color = 'green'
       this.width = 20;
       this.height = 20;
       this.active = []

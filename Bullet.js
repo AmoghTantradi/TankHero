@@ -6,6 +6,7 @@ class Bullet{
         this.y = y
         this.width = 2.5
         this.height = 2.5
+        this.color = 'red'
     }
 }
 

@@ -7,7 +7,7 @@ class Tank {
     this.theta = 0;
     this.dTheta = 1.0;
     this.speed = 1.75;
-    this.moving = false;
+    this.color =  'brown'	  
     this.health = 100;
     this.damage = 5.5;
     this.width = 40.0;
