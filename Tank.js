@@ -1,10 +1,9 @@
 const Turret = require('./Turret')
-//import InputHandler from "/src/InputHandler";
+
 
 class Tank {
 
   constructor(x=400, y=300) {
-    this.theta = 0;
     this.dTheta = 1.0;
     this.speed = 1.75;
     this.color =  'brown'	  
@@ -12,11 +11,12 @@ class Tank {
     this.damage = 5.5;
     this.width = 40.0;
     this.height = 20.0;
-    this.x = x
-    this.y = y
-    this.centerX = this.x + this.width / 2;
-    this.centerY = this.y + this.height / 2;
-    this.turret = new Turret(this.x, this.y);
+    this.diagnol = Math.sqrt(Math.pow(20,2) + Math.pow(40,2))
+    this.theta = 0;
+    this.omega = Math.atan2(this.height, this.width) * 180.0/Math.PI
+    this.centerX = x + this.width / 2;
+    this.centerY = y + this.height / 2;
+    this.turret = new Turret();
     
   }
 

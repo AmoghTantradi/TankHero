@@ -30,26 +30,33 @@ server.listen(3000, ()=>{
 let players = {}
 
 io.on('connection',(socket)=>{
-	console.log('succesfully connected!\n')
+	console.log('succesfully connected!')
+
+
 	socket.on('new player',()=>{
-		players[socket.id] = new Tank()
+	//	if(Object.keys(players).length < 5){
+			players[socket.id] = new Tank()
+	//	}
+	//	else console.log('Sorry there are too many players')
 	})
 
 	socket.on('movement', (data) =>{
 		let player = players[socket.id] || {}
 		if(data.forward){//w key 
-			player.x += player.speed*Math.cos(player.theta * Math.PI/180.0)
-			player.y += player.speed*Math.sin(player.theta*Math.PI/180.0)
+			player.centerX += player.speed*Math.cos(player.theta*Math.PI/180.0)
+			player.centerY += player.speed*Math.sin(player.theta*Math.PI/180.0)
 		}
 		if(data.back){//s key 
-			player.x -= player.speed*Math.cos(player.theta * Math.PI/180.0)
-			player.y -= player.speed*Math.sin(player.theta*Math.PI/180.0)
+			player.centerX -= player.speed*Math.cos(player.theta*Math.PI/180.0)
+			player.centerY -= player.speed*Math.sin(player.theta*Math.PI/180.0)
 		}
 		if(data.turnLeft){// a key 
+			//update x,y coordinates in rotation math
 			player.theta -= player.dTheta
 			player.theta %= 360
 		}
 		if(data.turnRight){// d key 
+			//update x,y coordinates with rotation math
 			player.theta += player.dTheta
 			player.theta %= 360
 		}
@@ -63,12 +70,13 @@ io.on('connection',(socket)=>{
 		}
 		if(data.shoot){
 			//we need to add a bullet into the chamber of the turret
-			//here we need to also make sure that we only load one bullet into the chamver
+			//here we need to also make sure that we only load one bullet into the chamver(work on this)
+			
 			player.turret.active.push(new Bullet(
-				player.x + player.width/2+2.0*player.turret.width*Math.cos((player.turret.theta+player.theta)*Math.PI/180.0),
-				player.y + player.height / 2+2.0*player.turret.width*Math.sin((player.turret.theta + player.theta)*Math.PI/180.0) ,
+				player.centerX+2.0*player.turret.width*Math.cos((player.turret.theta+player.theta)*Math.PI/180.0),
+				player.centerY+2.0*player.turret.width*Math.sin((player.turret.theta + player.theta)*Math.PI/180.0),
 				player.turret.theta+player.theta
-			  ))
+			  ))	
 		}
 	})
 })
@@ -86,26 +94,23 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 		for(let i = 0 ; i < player.turret.active.length; i++){
 			const dx =  player.turret.active[i].speed*Math.cos(player.turret.active[i].theta *Math.PI/180.0) 
 			const dy = player.turret.active[i].speed*Math.sin(player.turret.active[i].theta *Math.PI/180.0)	
-			if(player.turret.active[i].x + dx >= 800 || player.turret.active[i].x + dx <= 0 || player.turret.active[i].y + dy >= 600 || player.turret.active[i].y +dy <= 0){
+			if(player.turret.active[i].centerX + dx >= 800 || player.turret.active[i].centerX + dx <= 0 || player.turret.active[i].centerY + dy >= 600 || player.turret.active[i].centerY+dy <= 0){
 				player.turret.active.splice(i,1)
 				i--
 			}
 			else{
-				player.turret.active[i].x += dx
-				player.turret.active[i].y += dy
-
+				player.turret.active[i].centerX += dx
+				player.turret.active[i].centerY += dy
 			}
 		}
+	
 	}
 
 	hitbox(players)
+
 		
 //this is where big (O) complexity comes into play: we have to delete the bullets that are outside of the frame
-
 	last = current
-
-
-
 }, 1000/60)
 
 setInterval(()=>{

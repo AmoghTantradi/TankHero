@@ -1,35 +1,40 @@
+//helper function to determine the vertices of a rectangle rotated clockwise given its center and the length of its diagnol
 
+function getPoints(centerX, centerY,diagnol, theta, omega){
+    const x1 =  centerX - 0.5*diagnol*Math.cos((theta+omega)*Math.PI/180.0)
+    const y1 =  centerY - 0.5*diagnol*Math.sin((theta+omega)*Math.PI/180.0)
+    
+	const x2 = centerX + 0.5*diagnol*Math.cos((theta-omega)*Math.PI/180.0)
+	const y2 = centerY + 0.5*diagnol*Math.sin((theta-omega)*Math.PI/180.0)
+	
+	const x3 = centerX  + 0.5*diagnol*Math.cos((theta+omega) *Math.PI/180.0) 
+	const y3 = centerY + 0.5*diagnol*Math.sin((theta+omega)*Math.PI/180.0)
 
-function isHit(player, bullet){//checks if a player has been hit by a bullet (to do this we will use vectors)
-		
-	//basically want to see if the bullet is within the player
+	const x4 = centerX - 0.5*diagnol*Math.cos((theta-omega)*Math.PI/180.0)
+	const y4 = centerY - 0.5*diagnol*Math.sin((theta-omega)*Math.PI/180.0) 
 
-	const bulletCenterX = bullet.x + bullet.width / 2
-	const bulletCenterY = bullet.y + bullet.height / 2
-
-	const x1 = player.x
-	const y1 = player.y
-
-	const x2 = x1 + player.width*Math.cos(player.theta * Math.PI/180.0)
-	const y2 = y1 + player.width*Math.sin(player.theta * Math.PI/180.0)
-
-	const x3 = x1 -  player.height* Math.cos((90-player.theta)*Math.PI/180.0)
-	const y3 = y1 + player.height * Math.sin((90-player.theta)*Math.PI/180.0)
-
-	const x4 = x2 - player.height*Math.cos((90-player.theta)*Math.PI/180.0)
-	const y4 = y2 + player.height*Math.sin((90-player.theta)*Math.PI/180.0)
-
-	console.log('y1',y1, 'y2', y2, 'y3', y3, 'y4', y4)
-
-	//console.log( 'bulletCenterY', bulletCenterY, 'v1: ', v1*(bulletCenterX-x1) + y1, 'v2: ' , v2*(bulletCenterX-x1)+ y1, 'v3: ', v3*(bulletCenterX-x3)+ y3, 'v4: ', v4*(bulletCenterX - x2)+ y2)
-	//this will do for now 
-	return (bulletCenterY >= Math.min(y1,y2,y3,y4) && bulletCenterY <= Math.max(y1,y2,y3,y4) && bulletCenterX <= Math.max(x1,x2,x3,x4) && bulletCenterX >= Math.min(x1,x2,x3,x4))
-
+	return [{x:x1, y:y1},{x:x2,y:y2},{x:x3,y:y3},{x:x4,y:y4}]
 }
 
 
 
+//approximation that serves our purpose: since the size of the tanks are small, it makes no difference to simply give a bounding box. The tradeoff for O(1) complexity is worth the small 
+//discrepency in accurcay
+function intersects(rectA,centerX,centerY){
 
+	return (centerX >= Math.min(rectA[0].x, rectA[1].x,rectA[2].x,rectA[3].x) && centerX <= Math.max(rectA[0].x, rectA[1].x,rectA[2].x,rectA[3].x) && centerY >= Math.min(rectA[0].y,rectA[1].y,rectA[2].y,rectA[3].y) && centerY <= Math.max(rectA[0].y,rectA[1].y,rectA[2].y,rectA[3].y))
+}
+
+
+
+function isHit(player, bullet){//checks if a player has been hit by a bullet 
+		
+	
+	playerRect = getPoints(player.centerX,player.centerY, player.diagnol, player.theta, player.omega) //finds the vertices of the tank given its center points and its diagnol
+
+	//only an approximation
+	return intersects(playerRect, bullet.centerX, bullet.centerY) //doPolygonsIntersect(playerRect,bulletRect)
+}
 
 
 function hitbox(players){ //this will handle the logic for a tank being hit by a bullet
@@ -46,7 +51,8 @@ function hitbox(players){ //this will handle the logic for a tank being hit by a
 				for(let i = 0; i < player.turret.active.length; i++){
 					if (isHit(otherPlayer,player.turret.active[i])){
 
-						otherPlayer.color = 'blue' //debugging purposes
+					//	otherPlayer.color = 'blue' //debugging purposes
+					//	console.log('hit!') // debugging
 						otherPlayer.health -= otherPlayer.damage
 						player.turret.active.splice(i,1)
 						i--

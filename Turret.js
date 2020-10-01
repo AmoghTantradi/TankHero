@@ -1,7 +1,5 @@
 class Turret {
-    constructor(x, y) {
-      this.x = x;
-      this.y = y;
+    constructor() {
       this.theta = 0;
       this.dTheta = 2.0;
       this.color = 'green'
