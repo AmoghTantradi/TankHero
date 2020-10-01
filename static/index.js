@@ -109,7 +109,15 @@ function drawBullet(bullet,ctx){
 //draw this behind the player
 function drawPlayerHealthbar(player,ctx){
     ctx.fillStyle = 'blue'
-    ctx.fillRect(-player.width*3/4, -player.height/2, 2, player.height*(player.health/player.maxPossibleHealth))
+    const ratio = player.health/player.maxPossibleHealth
+    let height = player.height
+    if(ratio < 0){
+        height = 0.1
+    }
+    else{
+        height *= ratio
+    }
+    ctx.fillRect(-player.width*3/4, -player.height/2, 2, height)
     return
 }
 

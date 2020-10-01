@@ -27,14 +27,18 @@ server.listen(3000, ()=>{
 
 
 //adding websocket handlers
-let players = {}
+//stores the tanks and also keeps count of the number of allied tanks and the number of axis tanks
+//also keeps track of the number of 
+const gameData = {allied:0,axis:0, max: 4}
+//stores the players
+const players = {} 
 
 io.on('connection',(socket)=>{
 	console.log('succesfully connected!')
 
 
 	socket.on('new player',()=>{
-	//	if(Object.keys(players).length < 5){
+	//	if(players{
 			players[socket.id] = new Tank()
 	//	}
 	//	else console.log('Sorry there are too many players')
