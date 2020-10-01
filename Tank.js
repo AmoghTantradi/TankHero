@@ -8,7 +8,8 @@ class Tank {
     this.speed = 1.75;
     this.color =  'brown'	  
     this.health = 100;
-    this.damage = 5.5;
+    this.maxPossibleHealth = 100
+    this.damage = 0.5;
     this.width = 40.0;
     this.height = 20.0;
     this.diagnol = Math.sqrt(Math.pow(20,2) + Math.pow(40,2))

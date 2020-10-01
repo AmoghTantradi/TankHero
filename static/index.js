@@ -106,6 +106,12 @@ function drawBullet(bullet,ctx){
     return
 }
 
+//draw this behind the player
+function drawPlayerHealthbar(player,ctx){
+    ctx.fillStyle = 'blue'
+    ctx.fillRect(-player.width*3/4, -player.height/2, 2, player.height*(player.health/player.maxPossibleHealth))
+    return
+}
 
 function drawPlayerTurret(player, ctx){
     ctx.fillStyle = player.turret.color;
@@ -124,6 +130,7 @@ function drawPlayerTank(player,ctx){
     ctx.rotate(player.theta * (Math.PI / 180));
     ctx.fillRect(-player.width/2,-player.height/2, player.width, player.height);
     drawPlayerTurret(player, ctx)
+    drawPlayerHealthbar(player,ctx)
     ctx.translate(-(player.centerX), -(player.centerY));
     ctx.restore();
 }
