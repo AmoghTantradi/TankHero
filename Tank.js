@@ -17,8 +17,8 @@ class Tank {
     this.diagnol = Math.sqrt(Math.pow(20,2) + Math.pow(40,2))
     this.theta = 0;
     this.omega = Math.atan2(this.height, this.width) * 180.0/Math.PI
-    this.centerX = x //+ this.width / 2;
-    this.centerY = y //+ this.height / 2;
+    this.centerX = x 
+    this.centerY = y 
     this.turret = new Turret();
     
   }

@@ -132,7 +132,7 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 		
 //this is where big (O) complexity comes into play: we have to delete the bullets that are outside of the frame
 //	last = current
-}, 1000/60)
+}, FRAME_RATE)
 
 
 

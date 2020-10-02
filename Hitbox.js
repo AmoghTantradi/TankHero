@@ -51,11 +51,10 @@ function hitbox(players){ //this will handle the logic for a tank being hit by a
 				for(let i = 0; i < player.turret.active.length; i++){
 					if (isHit(otherPlayer,player.turret.active[i])){
 
-					//	otherPlayer.color = 'blue' //debugging purposes
-					//	console.log('hit!') // debugging
 						if( !(player.team === otherPlayer.team)){
 							otherPlayer.health -= otherPlayer.damage
 						}
+						
 						player.turret.active.splice(i,1)
 						i--
 					}
