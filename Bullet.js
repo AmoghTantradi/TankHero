@@ -6,8 +6,8 @@ class Bullet{
         this.diagnol = Math.sqrt(Math.pow(this.width,2) + Math.pow(this.height,2))
         this.theta = theta  
         this.omega = Math.atan2(this.height,this.width)*180.0/Math.PI
-        this.centerX = x+this.width/2
-        this.centerY = y+this.height/2
+        this.centerX = x
+        this.centerY = y
         this.color = 'red'
     }
 }

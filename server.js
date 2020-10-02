@@ -36,7 +36,7 @@ app.get('/', (request,res) => {
 
 //adding websocket handlers
 //stores the tanks and also keeps count of the number of allied tanks and the number of axis tanks
-//also keeps track of the number of 
+
 const gameData = {allied:0,axis:0, max: 4}
 //stores the players
 const players = {} 
@@ -46,7 +46,7 @@ io.on('connection',(socket)=>{
 
 
 	socket.on('new player',()=>{
-		if(gameData.allied + gameData.axis < gameData.max){	//	if(players{
+		if(gameData.allied + gameData.axis < gameData.max){
 			if(gameData.allied <= gameData.axis){
 				players[socket.id] = new Tank (400,450,'black','grey')
 				gameData.allied++
