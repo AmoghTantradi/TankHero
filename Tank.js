@@ -3,10 +3,11 @@ const Turret = require('./Turret')
 
 class Tank {
 
-  constructor(x=400, y=300) {
+  constructor(x=400, y=300, color='brown',turretColor='green') {
     this.dTheta = 1.0;
     this.speed = 1.75;
-    this.color =  'brown'	  
+    this.color =  color
+    this.turretColor = turretColor
     this.health = 100;
     this.maxPossibleHealth = 100
     this.damage = 0.5;

@@ -122,7 +122,7 @@ function drawPlayerHealthbar(player,ctx){
 }
 
 function drawPlayerTurret(player, ctx){
-    ctx.fillStyle = player.turret.color;
+    ctx.fillStyle = player.turretColor
     ctx.save()
     ctx.rotate(player.turret.theta*(Math.PI/180.0))
     ctx.fillRect(-player.turret.width/2,-player.turret.height/2,player.turret.width, player.turret.height)

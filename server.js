@@ -38,10 +38,19 @@ io.on('connection',(socket)=>{
 
 
 	socket.on('new player',()=>{
-	//	if(players{
-			players[socket.id] = new Tank()
-	//	}
-	//	else console.log('Sorry there are too many players')
+		if(gameData.allied + gameData.axis < gameData.max){	//	if(players{
+			if(gameData.allied <= gameData.axis){
+				players[socket.id] = new Tank (400,450,'black','grey')
+				gameData.allied++
+			}
+			else{
+				players[socket.id] = new Tank(400,150,'brown','green') 
+				gameData.axis++
+			}
+		}
+		else{
+			console.log('Sorry there are too many players')
+		}
 	})
 
 	socket.on('movement', (data) =>{
