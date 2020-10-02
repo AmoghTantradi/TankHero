@@ -1,29 +1,37 @@
+const PORT = process.env.PORT || 3000
+const FRAME_RATE = 1000/60 //60 fps
+
+
+
+
+
+//Dependencies
 const express = require('express');//helps build webserver
 const http = require('http');//helps build webserver
 const path = require('path');
 const socketIO = require('socket.io');//handles websockets on the server
+
+
+
 const Tank = require('./Tank')
 const Bullet = require('./Bullet')
 const hitbox = require('./Hitbox')
 
+//initializing components 
 const app = express()
-
 const server = http.Server(app)
-
 const io = socketIO(server)
 
-app.set('port',3000)
+
+app.set('port',PORT)
 
 app.use('/static', express.static(__dirname + '/static')) //serves static folder not created yet
 
+
+//Routing
 app.get('/', (request,res) => {
 	res.sendFile(path.join(__dirname,'/static/index.html')) //serves the index.html file created
 })
-
-server.listen(3000, ()=>{
-	console.log('Starting server on port 3000')
-})
-
 
 
 //adding websocket handlers
@@ -132,4 +140,9 @@ setInterval(()=>{
 //this makes sure that the players are updated 60 times a second (so it's 60 fps)
 
 
+//starting server
+
+server.listen(PORT, ()=>{
+	console.log('Starting server on port 3000')
+})
 
