@@ -106,9 +106,9 @@ io.on('connection',(socket)=>{
 let last = (new Date()).getTime()
 
 setInterval(()=>{  //we have to update the bullets and also handle the logic if a tank gets hit by a bullet 
-	let current = (new Date()).getTime()
-	let dT = current - last
-
+//	let current = (new Date()).getTime()
+//	let dT = current - last
+	io.sockets.emit('state', players)
 	for(id in players){
 		const player = players[id]
 		
@@ -131,13 +131,9 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 
 		
 //this is where big (O) complexity comes into play: we have to delete the bullets that are outside of the frame
-	last = current
+//	last = current
 }, 1000/60)
 
-setInterval(()=>{
-	io.sockets.emit('state', players)
-}, 1000/60)
-//this makes sure that the players are updated 60 times a second (so it's 60 fps)
 
 
 //starting server
