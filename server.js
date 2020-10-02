@@ -103,7 +103,7 @@ io.on('connection',(socket)=>{
 })
 
 
-let last = (new Date()).getTime()
+//let last = (new Date()).getTime()
 
 setInterval(()=>{  //we have to update the bullets and also handle the logic if a tank gets hit by a bullet 
 //	let current = (new Date()).getTime()
