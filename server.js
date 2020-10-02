@@ -12,7 +12,7 @@ const path = require('path');
 const socketIO = require('socket.io');//handles websockets on the server
 
 
-
+//game dependencies
 const Tank = require('./Tank')
 const Bullet = require('./Bullet')
 const hitbox = require('./Hitbox')
