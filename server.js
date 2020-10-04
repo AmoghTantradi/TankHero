@@ -15,13 +15,13 @@ const socketIO = require('socket.io');//handles websockets on the server
 //game dependencies
 const Tank = require('./Tank')
 const Bullet = require('./Bullet')
-const hitbox = require('./Hitbox')
+const Hitbox = require('./Hitbox')
 
 //initializing components 
 const app = express()
 const server = http.Server(app)
 const io = socketIO(server)
-
+const hit = new Hitbox() 
 
 app.set('port',PORT)
 
@@ -115,7 +115,9 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 		for(let i = 0 ; i < player.turret.active.length; i++){
 			const dx =  player.turret.active[i].speed*Math.cos(player.turret.active[i].theta *Math.PI/180.0) 
 			const dy = player.turret.active[i].speed*Math.sin(player.turret.active[i].theta *Math.PI/180.0)	
-			if(player.turret.active[i].centerX + dx >= 800 || player.turret.active[i].centerX + dx <= 0 || player.turret.active[i].centerY + dy >= 600 || player.turret.active[i].centerY+dy <= 0){
+			
+			if(hit.isOutside(0,0,800,600,player.turret.active[i],dx,dy)){
+				console.log('deleted!')
 				player.turret.active.splice(i,1)
 				i--
 			}
@@ -127,7 +129,7 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 	
 	}
 
-	hitbox(players)
+	hit.hitbox(players)
 
 		
 //this is where big (O) complexity comes into play: we have to delete the bullets that are outside of the frame
