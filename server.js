@@ -45,19 +45,22 @@ io.on('connection',(socket)=>{
 	console.log('succesfully connected!')
 
 
-	socket.on('new player',()=>{
+	socket.on('new-player',(data)=>{
 		if(gameData.allied + gameData.axis < gameData.max){
 			if(gameData.allied <= gameData.axis){
-				players[socket.id] = new Tank (400,450,'black','grey')
+				players[socket.id] = new Tank (400,450,'black','grey', data.name)
 				gameData.allied++
+				socket.emit('msg', 'Allied tank')
 			}
 			else{
-				players[socket.id] = new Tank(400,150,'brown','green') 
+				players[socket.id] = new Tank(400,150,'brown','green', data.name) 
 				gameData.axis++
+				socket.emit('msg', 'Axis tank')
 			}
 		}
 		else{
 			console.log('Sorry there are too many players')
+			socket.emit('msg', 'Sorry, this lobby is full. Please wait until a player leaves the game')//this is only sent to the extra player who tries to join
 		}
 	})
 
