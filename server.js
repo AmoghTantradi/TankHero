@@ -117,7 +117,6 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 			const dy = player.turret.active[i].speed*Math.sin(player.turret.active[i].theta *Math.PI/180.0)	
 			
 			if(hit.isOutside(0,0,800,600,player.turret.active[i],dx,dy)){
-				console.log('deleted!')
 				player.turret.active.splice(i,1)
 				i--
 			}
