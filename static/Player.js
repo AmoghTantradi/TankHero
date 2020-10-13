@@ -1,7 +1,7 @@
 
 import Brush from './Brush.js';
 
-export default class Game{
+export default class Player{
 
     constructor(ctx){
         this.player =  { //json object that represents the player's state of motion
