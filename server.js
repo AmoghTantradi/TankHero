@@ -2,9 +2,6 @@ const PORT = process.env.PORT || 3000
 const FRAME_RATE = 1000/60 //60 fps
 
 
-
-
-
 //Dependencies
 const express = require('express');//helps build webserver
 const http = require('http');//helps build webserver
@@ -13,9 +10,9 @@ const socketIO = require('socket.io');//handles websockets on the server
 
 
 //game dependencies
-const Tank = require('./Tank')
-const Bullet = require('./Bullet')
-const Hitbox = require('./Hitbox')
+const Tank = require('./server/Tank')
+const Bullet = require('./server/Bullet')
+const Hitbox = require('./server/Hitbox')
 
 //initializing components 
 const app = express()
@@ -24,13 +21,13 @@ const io = socketIO(server)
 const hit = new Hitbox() 
 
 app.set('port',PORT)
-
 app.use('/static', express.static(__dirname + '/static')) //serves static folder not created yet
+
 
 
 //Routing
 app.get('/', (request,res) => {
-	res.sendFile(path.join(__dirname,'/static/index.html')) //serves the index.html file created
+	res.sendFile(path.join(__dirname,'static/index.html')) //serves the index.html file created
 })
 
 
@@ -114,7 +111,6 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 	io.sockets.emit('state', players)
 	for(id in players){
 		const player = players[id]
-		
 		for(let i = 0 ; i < player.turret.active.length; i++){
 			const dx =  player.turret.active[i].speed*Math.cos(player.turret.active[i].theta *Math.PI/180.0) 
 			const dy = player.turret.active[i].speed*Math.sin(player.turret.active[i].theta *Math.PI/180.0)	
@@ -143,6 +139,6 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 //starting server
 
 server.listen(PORT, ()=>{
-	console.log('Starting server on port 3000')
+	console.log('Starting server on port',PORT)
 })
 

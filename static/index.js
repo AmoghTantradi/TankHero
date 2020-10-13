@@ -1,11 +1,9 @@
-import Brush from './Brush.js'
-import Game from './Game.js'
+import Game from './Game.js';
 
 
 $(document).ready(()=>{
     const socket = io()
     const ctx = document.getElementById('gameScreen').getContext('2d')
-    const brush = new Brush(ctx)
     let game
 
     $('#name-input').focus();

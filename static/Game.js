@@ -1,5 +1,6 @@
 
-import Brush from './Brush.js'
+import Brush from './Brush.js';
+
 export default class Game{
 
     constructor(ctx){
@@ -18,7 +19,6 @@ export default class Game{
 
     input(){
         document.addEventListener('keydown', (event) => {
-            console.log('hello')
             switch(event.keyCode){
                 case 87:
                     this.player.forward = true
