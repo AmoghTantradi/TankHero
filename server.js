@@ -1,5 +1,5 @@
 const PORT = process.env.PORT || 3000
-const FRAME_RATE = 1000/60 //60 fps
+const FRAME_RATE = 1000 / 60 //60 fps
 
 
 //Dependencies
@@ -10,15 +10,13 @@ const socketIO = require('socket.io');//handles websockets on the server
 
 
 //game dependencies
-const Tank = require('./server/Tank')
-const Bullet = require('./server/Bullet')
-const Hitbox = require('./server/Hitbox')
+const Engine = require('./server/Engine')
 
 //initializing components 
 const app = express()
 const server = http.Server(app)
 const io = socketIO(server)
-const hit = new Hitbox() 
+const game = new Engine()
 
 app.set('port',PORT)
 app.use('/static', express.static(__dirname + '/static')) //serves static folder not created yet
@@ -32,106 +30,62 @@ app.get('/', (request,res) => {
 
 
 //adding websocket handlers
-//stores the tanks and also keeps count of the number of allied tanks and the number of axis tanks
-
-const gameData = {allied:0,axis:0, max: 4}
-//stores the players
-const players = {} 
 
 io.on('connection',(socket)=>{
 	console.log('succesfully connected!')
 
 
 	socket.on('new-player',(data)=>{
-		if(gameData.allied + gameData.axis < gameData.max){
-			if(gameData.allied <= gameData.axis){
-				players[socket.id] = new Tank (400,450,'black','grey', data.name)
-				gameData.allied++
-				socket.emit('msg', 'Allied tank')
-			}
-			else{
-				players[socket.id] = new Tank(400,150,'brown','green', data.name) 
-				gameData.axis++
-				socket.emit('msg', 'Axis tank')
-			}
-		}
-		else{
-			console.log('Sorry there are too many players')
-			socket.emit('msg', 'Sorry, this lobby is full. Please wait until a player leaves the game')//this is only sent to the extra player who tries to join
-		}
+		game.createPlayer(socket, data.name) 
 	})
 
 	socket.on('movement', (data) =>{
-		let player = players[socket.id] || {}
-		if(data.forward){//w key 
-			player.centerX += player.speed*Math.cos(player.theta*Math.PI/180.0)
-			player.centerY += player.speed*Math.sin(player.theta*Math.PI/180.0)
+		if(game.gameState === 0){
+			socket.emit('msg', 'sorry but the game has not yet begun. Please wait for more players to join')
 		}
-		if(data.back){//s key 
-			player.centerX -= player.speed*Math.cos(player.theta*Math.PI/180.0)
-			player.centerY -= player.speed*Math.sin(player.theta*Math.PI/180.0)
-		}
-		if(data.turnLeft){// a key 
-			//update x,y coordinates in rotation math
-			player.theta -= player.dTheta
-			player.theta %= 360
-		}
-		if(data.turnRight){// d key 
-			//update x,y coordinates with rotation math
-			player.theta += player.dTheta
-			player.theta %= 360
-		}
-		if(data.turnTurretLeft){//left arrow key 
-			player.turret.theta -= player.turret.dTheta
-			player.turret.theta %= 360
-		}
-		if(data.turnTurretRight){//right arrow key 
-			player.turret.theta += player.turret.dTheta
-			player.turret.theta %= 360
-		}
-		if(data.shoot){
-			//we need to add a bullet into the chamber of the turret
-			//here we need to also make sure that we only load one bullet into the chamver(work on this)
-			
-			player.turret.active.push(new Bullet(
-				player.centerX+2.0*player.turret.width*Math.cos((player.turret.theta+player.theta)*Math.PI/180.0),
-				player.centerY+2.0*player.turret.width*Math.sin((player.turret.theta + player.theta)*Math.PI/180.0),
-				player.turret.theta+player.theta
-			  ))	
+		else {
+			game.updatePlayerMovement(socket, data)
 		}
 	})
+	
 })
 
 
-//let last = (new Date()).getTime()
+let last = (new Date()).getTime()
+
+let sum = 0 
+
+let count = 0
 
 setInterval(()=>{  //we have to update the bullets and also handle the logic if a tank gets hit by a bullet 
-//	let current = (new Date()).getTime()
-//	let dT = current - last
-	io.sockets.emit('state', players)
-	for(id in players){
-		const player = players[id]
-		for(let i = 0 ; i < player.turret.active.length; i++){
-			const dx =  player.turret.active[i].speed*Math.cos(player.turret.active[i].theta *Math.PI/180.0) 
-			const dy = player.turret.active[i].speed*Math.sin(player.turret.active[i].theta *Math.PI/180.0)	
-			
-			if(hit.isOutside(0,0,800,600,player.turret.active[i],dx,dy)){
-				player.turret.active.splice(i,1)
-				i--
-			}
-			else{
-				player.turret.active[i].centerX += dx
-				player.turret.active[i].centerY += dy
-			}
-		}
 	
+	const current = (new Date()).getTime()
+
+	const dT = current - last
+
+	last = current
+
+	sum += dT
+
+	
+	if(Math.abs(sum - 1000) < dT) {
+		console.log('sum', sum, 'frames', count)
+		sum = 0 
+		count = 0
 	}
 
-	hit.hitbox(players)
+	if(game.gameState === 1){
+		io.sockets.emit('state', Object.fromEntries(game.players))
+	}
+	
 
-		
+	game.update()
+
+
+
+	count++
+
 //this is where big (O) complexity comes into play: we have to delete the bullets that are outside of the frame
-//	last = current
 }, FRAME_RATE)
 
 

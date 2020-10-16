@@ -1,5 +1,4 @@
 
-import Brush from './Brush.js';
 
 export default class Player{
 
@@ -13,8 +12,8 @@ export default class Player{
             turnTurretRight: false,
             shoot :false
         }
+       
         this.input()
-        this.brush = new Brush(ctx)
     }
 
     input(){
@@ -38,9 +37,13 @@ export default class Player{
                 case 39:
                     this.player.turnTurretRight = true
                     break
-                case 38:
+                case 38:{
+               
                     this.player.shoot = true
+                    this.canShoot = false
+   
                     break
+                }
                 default:
                     break
             }
@@ -68,16 +71,14 @@ export default class Player{
                 case 39:
                     this.player.turnTurretRight = false
                     break
-                case 38:
+                case 38:{
                     this.player.shoot = false
                     break 
+                }
                 default:
                     break 
             }
         })
     }
-
-
-
 
 }

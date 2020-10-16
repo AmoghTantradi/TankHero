@@ -1,9 +1,10 @@
 import Player from './Player.js';
-
+import Brush from './Brush.js'
 
 $(document).ready(()=>{
     const socket = io()
     const ctx = document.getElementById('gameScreen').getContext('2d')
+    const brush = new Brush(ctx)
     let client
 
     $('#name-input').focus();
@@ -34,11 +35,16 @@ setInterval( ()=>{
     
 
 socket.on('state', (players) => { //recieves player data from server every 60 seconds 
+    
     ctx.clearRect(0,0,800,600)
-    for(let id in players){
+    
+    for( let id in players){
         const player = players[id]
-        if(client !== undefined) client.brush.draw(player)
+        brush.draw(player)
     }
+    
+   
+    
 })
 
 socket.on('msg', (data)=>{ //this is used to communicate with the player

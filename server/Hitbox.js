@@ -63,7 +63,7 @@ class Hitbox{
 
 
 	hitbox(players){ //this will handle the logic for a tank being hit by a bullet
-
+		/*
 		for(const id in players){
 
 			const player = players[id]
@@ -86,7 +86,26 @@ class Hitbox{
 					}
 				}
 			}
-		}
+		}*/
+		players.forEach((player, socket) =>{
+
+			players.forEach((otherPlayer, otherSocket) =>{
+				if(socket !== otherSocket){
+					for(let i = 0 ; i < player.turret.active.length; i++){
+						if(this.isHit(otherPlayer, player.turret.active[i])){
+
+							if(!(player.team === otherPlayer.team)){
+								otherPlayer.health -= otherPlayer.damage
+							}
+							player.turret.active.splice(i, 1)
+							i--
+						}
+					}
+				}
+			})
+
+
+		})
 		return 
 	}
 
