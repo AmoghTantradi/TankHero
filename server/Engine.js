@@ -69,7 +69,7 @@ class Engine{
            const team = this.players.get(socket.id).team
            this.players.delete(socket.id)
            this.gameData.set(team, this.gameData.get(team)-1)
-           console.log('deleted', this.gameData)
+           console.log('deleted player')
        }
     }
 
