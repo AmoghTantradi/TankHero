@@ -12,6 +12,10 @@ const socketIO = require('socket.io');//handles websockets on the server
 //game dependencies
 const Engine = require('./server/Engine')
 
+//lib dependencies
+
+const fromEntries = require('./lib/functions')
+
 //initializing components 
 const app = express()
 const server = http.Server(app)
@@ -47,6 +51,12 @@ io.on('connection',(socket)=>{
 			game.updatePlayerMovement(socket, data)
 		}
 	})
+
+
+	socket.on('disconnect', ()=>{
+		game.removePlayer(socket)
+	})
+
 	
 })
 
@@ -75,7 +85,7 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 	}
 
 	if(game.gameState === 1){
-		io.sockets.emit('state', Object.fromEntries(game.players))
+		io.sockets.emit('state', fromEntries(game.players))
 	}
 	
 
