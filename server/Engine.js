@@ -51,7 +51,7 @@ class Engine{
 				socket.emit('msg', 'Axis tank')
             }
             if(this.gameData.get('allied') + this.gameData.get('axis') ===  this.gameData.get('max')){
-                socket.emit('msg','Now that all players have joined, this game will start')
+                socket.emit('msg','Now that all players have joined, this game will start. Use WASD and arrow keys to move your tank and its turret. Press the front arrow key to shoot. There is a reload time of 1 second.')
                 this.start()
             }
 		}
