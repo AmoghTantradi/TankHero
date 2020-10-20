@@ -14,7 +14,7 @@ const Engine = require('./server/Engine')
 
 //lib dependencies
 
-const fromEntries = require('./lib/functions')
+const fromEntries = require('./lib/util')
 
 //initializing components 
 const app = express()
