@@ -23,13 +23,12 @@ const io = socketIO(server)
 const game = new Engine()
 
 app.set('port',PORT)
-app.use('/static', express.static(__dirname + '/static')) //serves static folder not created yet
-
-
+app.use('/client', express.static(__dirname + '/client')) //serves static folder not created yet
+app.use('/dist', express.static(path.join(__dirname, '/dist')))
 
 //Routing
 app.get('/', (request,res) => {
-	res.sendFile(path.join(__dirname,'static/index.html')) //serves the index.html file created
+	res.sendFile(path.join(__dirname,'views/index.html')) //serves the index.html file created
 })
 
 

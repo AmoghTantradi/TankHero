@@ -1,12 +1,21 @@
-import Player from './Player.js';
-import Brush from './Brush.js'
+require('./css/styles.css')
 
-$(document).ready(()=>{
+const $ = require('jquery')
+
+const io = require('socket.io-client')
+
+
+const Client = require('./js/Client')
+const Brush = require('./js/Brush')
+
+
+$(()=>{
     const socket = io()
+
+   
     const ctx = document.getElementById('gameScreen').getContext('2d')
     const brush = new Brush(ctx)
     let client
-
     $('#name-input').focus();
 
 function sendName(){
@@ -15,12 +24,12 @@ function sendName(){
     if(name && name.length < 20){
         $('#name-prompt-container').empty()
         socket.emit('new-player', {name})
-        client = new Player(ctx)
+        client = new Client(socket.id, ctx)
         $('#name-prompt-overlay').remove()
         $('#gameScreen').focus()
     }
     else{
-        alert('Your name cannot be blank or over 20 characters.')
+        window.alert('Your name cannot be blank or over 20 characters.')
     }
     return false
 }
@@ -30,7 +39,7 @@ $('#name-submit').click(sendName)
 
 
 setInterval( ()=>{
-    if(client !== undefined) socket.emit('movement', client.player);
+    if(client) socket.emit('movement', client.input);
     }, 1000 / 60);
     
 
@@ -48,7 +57,7 @@ socket.on('state', (players) => { //recieves player data from server every 60 se
 })
 
 socket.on('msg', (data)=>{ //this is used to communicate with the player
-    alert(data)
+    window.alert(data)
 })
     
 })

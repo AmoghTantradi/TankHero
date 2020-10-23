@@ -1,4 +1,4 @@
-export default class Brush{
+class Brush{
 
     constructor(ctx){
         this.ctx = ctx
@@ -67,4 +67,6 @@ export default class Brush{
     }
 
 }
+
+module.exports = Brush
 

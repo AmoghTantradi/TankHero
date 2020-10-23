@@ -1,6 +1,7 @@
 const Turret = require('./Turret')
-const Hitbox = require('./Hitbox')
+const Hitbox = require('../lib/Hitbox')
 const Bullet = require('./Bullet')
+
 class Tank {
 
   constructor(x=400, y=300, color='brown',turretColor='green', name='') {
@@ -25,6 +26,8 @@ class Tank {
 
     this.reloadTime = 1000 // 5 seconds 
 
+    this.lastProcessedInput = 0
+
     this.lastShotTime = 0 
     this.lastUpdateTime = 0 
   }
@@ -45,6 +48,40 @@ class Tank {
         }
 
       }
+
+  }
+
+  applyInput(data){
+
+    if(data.forward){//w key 
+      this.centerX += this.speed*Math.cos(this.theta*Math.PI/180.0)
+      this.centerY += this.speed*Math.sin(this.theta*Math.PI/180.0)
+    }
+    if(data.back){//s key 
+        this.centerX -= this.speed*Math.cos(this.theta*Math.PI/180.0)
+        this.centerY -= this.speed*Math.sin(this.theta*Math.PI/180.0)
+    }
+    if(data.turnLeft){// a key 
+        //update x,y coordinates in rotation math
+        this.theta -= this.dTheta
+        this.theta %= 360
+    }
+    if(data.turnRight){// d key 
+        //update x,y coordinates with rotation math
+        this.theta += this.dTheta
+        this.theta %= 360
+    }
+    if(data.turnTurretLeft){//left arrow key 
+        this.turret.theta -= this.turret.dTheta
+        this.turret.theta %= 360
+    }
+    if(data.turnTurretRight){//right arrow key 
+        this.turret.theta += this.turret.dTheta
+        this.turret.theta %= 360
+    }
+    if(data.shoot){
+        this.shoot()
+    }
 
   }
 

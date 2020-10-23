@@ -1,6 +1,5 @@
 const Player = require('./Tank')
-const Bullet = require('./Bullet')
-const Hitbox = require('./Hitbox')
+const Hitbox = require('../lib/Hitbox')
 
 class Engine{
 
@@ -74,6 +73,17 @@ class Engine{
     }
 
 
+    updatePlayerMovement(socket, data){
+
+        if(this.players.has(socket.id)){
+            const player = this.players.get(socket.id)
+            player.applyInput(data)
+            player.lastProcessedInput = data.sequenceId
+        }
+    }
+
+
+
     update(socket){
         
         if(this.gameState === 0 ){
@@ -102,46 +112,6 @@ class Engine{
         this.hit.hitbox(this.players)
     }
 
-    updatePlayerMovement(socket, data){
-
-        if(this.players.has(socket.id)){
-            const player = this.players.get(socket.id)
-            if(data.forward){//w key 
-                player.centerX += player.speed*Math.cos(player.theta*Math.PI/180.0)
-                player.centerY += player.speed*Math.sin(player.theta*Math.PI/180.0)
-            }
-            if(data.back){//s key 
-                player.centerX -= player.speed*Math.cos(player.theta*Math.PI/180.0)
-                player.centerY -= player.speed*Math.sin(player.theta*Math.PI/180.0)
-            }
-            if(data.turnLeft){// a key 
-                //update x,y coordinates in rotation math
-                player.theta -= player.dTheta
-                player.theta %= 360
-            }
-            if(data.turnRight){// d key 
-                //update x,y coordinates with rotation math
-                player.theta += player.dTheta
-                player.theta %= 360
-            }
-            if(data.turnTurretLeft){//left arrow key 
-                player.turret.theta -= player.turret.dTheta
-                player.turret.theta %= 360
-            }
-            if(data.turnTurretRight){//right arrow key 
-                player.turret.theta += player.turret.dTheta
-                player.turret.theta %= 360
-            }
-            if(data.shoot){
-                //we need to add a bullet into the chamber of the turret
-                //here we need to also make sure that we only load one bullet into the chamver(work on this)
-                player.shoot()
-            }
-        }
-    }
-
-
 
 }
-
 module.exports = Engine
