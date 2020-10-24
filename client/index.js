@@ -24,7 +24,7 @@ function sendName(){
     if(name && name.length < 20){
         $('#name-prompt-container').empty()
         socket.emit('new-player', {name})
-        client = new Client(socket.id, ctx)
+        client = new Client(ctx)
         $('#name-prompt-overlay').remove()
         $('#gameScreen').focus()
     }
@@ -39,10 +39,13 @@ $('#name-submit').click(sendName)
 
 
 setInterval( ()=>{
-    if(client) socket.emit('movement', client.input);
+    //if(client) socket.emit('movement', client.input);
+    if(client){
+        client.update(socket)
+    }
     }, 1000 / 60);
     
-
+/*
 socket.on('state', (players) => { //recieves player data from server every 60 seconds 
     
     ctx.clearRect(0,0,800,600)
@@ -55,6 +58,8 @@ socket.on('state', (players) => { //recieves player data from server every 60 se
    
     
 })
+
+*/
 
 socket.on('msg', (data)=>{ //this is used to communicate with the player
     window.alert(data)

@@ -25,12 +25,14 @@ class Tank {
     this.hitbox = new Hitbox()
 
     this.reloadTime = 1000 // 5 seconds 
-
-    this.lastProcessedInput = 0
-
     this.lastShotTime = 0 
     this.lastUpdateTime = 0 
+
+    this.lastProcessedInput = 0
+    this.positionBuffer = []
+    
   }
+
 
   update(last,dT){
 
