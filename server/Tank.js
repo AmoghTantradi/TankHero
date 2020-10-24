@@ -13,7 +13,7 @@ class Tank {
     this.team = (color === 'brown') ? ('axis') : 'allied'
     this.health = 100;
     this.maxPossibleHealth = 100
-    this.damage = 0.5;
+    this.damage = 5;
     this.width = 40.0;
     this.height = 20.0;
     this.diagnol = Math.sqrt(Math.pow(20,2) + Math.pow(40,2))
@@ -27,10 +27,6 @@ class Tank {
     this.reloadTime = 1000 // 5 seconds 
     this.lastShotTime = 0 
     this.lastUpdateTime = 0 
-
-    this.lastProcessedInput = 0
-    this.positionBuffer = []
-    
   }
 
 

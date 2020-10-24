@@ -44,22 +44,6 @@ setInterval( ()=>{
         client.update(socket)
     }
     }, 1000 / 60);
-    
-/*
-socket.on('state', (players) => { //recieves player data from server every 60 seconds 
-    
-    ctx.clearRect(0,0,800,600)
-    
-    for( let id in players){
-        const player = players[id]
-        brush.draw(player)
-    }
-    
-   
-    
-})
-
-*/
 
 socket.on('msg', (data)=>{ //this is used to communicate with the player
     window.alert(data)
