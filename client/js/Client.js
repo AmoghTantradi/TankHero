@@ -173,7 +173,7 @@ class Client{
                 const state = players[id]
 
                 if(!this.players[id]){
-                    this.players[id] = new Player()
+                    this.players[id] = new Player(state.centerX, state.centerY, state.color, state.turretColor, state.name)
                 }
 
                 const player = this.players[id]
