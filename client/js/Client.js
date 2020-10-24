@@ -128,14 +128,19 @@ class Client{
     processInputs(socket){
 
         if(!this.players[socket.id]) return
-        this.input.sequenceId++
-        socket.emit('movement', this.input)
+        for(let i in this.input){
+            if(this.input[i]){
+                this.input.sequenceId++
+                socket.emit('movement', this.input)
+        
+                this.players[socket.id].applyInput(this.input)
+        
+                this.pendingInputs.push(this.input)
+                break
+        
+            }
+        }
 
-        this.players[socket.id].applyInput(this.input)
-
-        this.pendingInputs.push(this.input)
-
-        console.log(this.pendingInputs)
 
     }
 
@@ -210,6 +215,7 @@ class Client{
             let player = this.players[id]
             
             if(id === socket.id){
+                console.log('hello')
                 continue
             }
 
