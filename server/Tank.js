@@ -27,6 +27,15 @@ class Tank {
     this.reloadTime = 1000 // 5 seconds 
     this.lastShotTime = 0 
     this.lastUpdateTime = 0 
+
+    //prediction and reconcilliation
+
+    this.lastProcessedInput = 0
+
+    //interpolation
+
+    this.bufferQueue = []
+
   }
 
 
