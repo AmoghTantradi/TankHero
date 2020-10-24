@@ -136,6 +136,7 @@ class Client{
                 this.players[socket.id].applyInput(this.input)
         
                 this.pendingInputs.push(this.input)
+                console.log(this.pendingInputs)
                 break
         
             }
