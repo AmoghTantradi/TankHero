@@ -20,7 +20,7 @@ class Engine{
     init(){
         this.gameData.set('allied',0)
         this.gameData.set('axis', 0)
-        this.gameData.set('max',4)
+        this.gameData.set('max',2)
     }
 
     start(){
