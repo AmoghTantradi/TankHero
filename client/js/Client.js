@@ -128,21 +128,25 @@ class Client{
     processInputs(socket){
 
         if(!this.players[socket.id]) return
-        for(let i in this.input){
-            if(this.input[i]){
-                this.input.sequenceId++
-                socket.emit('movement', this.input)
         
-                this.players[socket.id].applyInput(this.input)
+        this.input.sequenceId++
         
-                this.pendingInputs.push(this.input)
-                console.log(this.pendingInputs)
-                break
-        
-            }
+        const movement = {
+            forward:this.input.forward,
+            back: this.input.back,
+            turnLeft: this.input.turnLeft,
+            turnRight: this.input.turnRight,
+            turnTurretLeft: this.input.turnTurretLeft,
+            turnTurretRight: this.input.turnTurretRight,
+            shoot : this.input.shoot,
+            sequenceId: this.input.sequenceId
         }
-
-
+        socket.emit('movement', movement)
+        
+        this.players[socket.id].applyInput(movement)
+        
+        this.pendingInputs.push(movement)
+        
     }
 
     processServerMessages(socket){
