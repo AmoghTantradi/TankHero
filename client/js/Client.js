@@ -1,11 +1,3 @@
-/*
-*some shit is going wrong here 
-*
-* The bullets is the main issue
-*
-*
-*/
-
 
 
 const Player = require('../../server/Tank')
@@ -37,8 +29,6 @@ class Client{
         this.pendingInputs = []
 
         this.brush = new Brush(ctx)
-        
-        this.handle()
     }
 
     handle(){
@@ -111,23 +101,32 @@ class Client{
 
     update(socket){
     
-        const current = Date.now()
-        this.dT = (current - this.last)
-        this.last = current
+ //       const current = Date.now()
+  //      this.dT = (current - this.last)
+   //     this.last = current
     
 
 
        this.processInputs(socket)
        this.processServerMessages(socket)
-       this.interpolatePlayers(socket)
-       this.draw()
+     //  this.interpolatePlayers(socket)
+        this.draw()
 
     }
 
 
     processInputs(socket){
 
-        if(!this.players[socket.id]) return
+        socket.on('gameState', (value) =>{
+            if(value !== 1){
+                return
+            }
+        })
+
+        if(!this.players[socket.id]){
+            console.log(socket.id, 'is not here')
+            return 
+        }
         
         this.sequenceId++
 
@@ -149,8 +148,15 @@ class Client{
         
     }
 
-    processServerMessages(socket){
+    processServerMessages(socket){ //we have to remove players who have disconnected as well
         socket.on('state', (players) =>{
+
+            for(let id in this.players){
+                if(!players[id]){
+                    //remove the id if it is not there
+                    delete this.players[id]
+                }
+            }
 
             for(let id in players){
                 const player = players[id]
@@ -158,6 +164,7 @@ class Client{
                 if(!this.players[id]){
                     const p = new Player(player.centerX, player.centerY, player.color, player.turretColor, player.name)
                     this.players[id] = p
+                    console.log('new player initialized', p.name)
                 }
 
                 const p2 = this.players[id]
@@ -175,29 +182,29 @@ class Client{
                     let j = 0 
                     while (j < this.pendingInputs.length){
                         const input = this.pendingInputs[j]
-                        if(this.input.sequenceId <= player.lastProcessedInput){
+                        if(this.sequenceId <= player.lastProcessedInput){
                             this.pendingInputs.splice(j, 1)
+                            j--
                             //delete inputs that are already processed
                         }
                         else{
                             //not processed by server yet. re-apply it 
-                            p2.applyInput(this.input)
+                            p2.applyInput(input)
                             j++
                         }
                     }
                 }
                 else{
-                 /* p2.centerX = player.centerX
+                    p2.centerX = player.centerX
                     p2.centerY = player .centerY
                     p2.theta = player.theta
                     p2.turret.theta = player.turret.theta
                     p2.turret.active = player.turret.active
                     p2.health = player.health
-                    */
-
-                    let timestamp = new Date()
-                    p2.bufferQueue.push([timestamp, player.centerX, player.centerY, player.theta, player.turret.theta,player.turret.active])
-
+            
+               //     let timestamp = new Date()
+               //     p2.bufferQueue.push([timestamp, player.centerX, player.centerY, player.theta, player.turret.theta,player.turret.active])
+//
                 }
 
             }
