@@ -1,5 +1,5 @@
 /*
-*
+*some shit is going wrong here 
 *
 * The bullets is the main issue
 *
@@ -14,16 +14,16 @@ class Client{
 
     constructor(ctx){
 
-        this.input =  { //json object that represents the player's state of motion
-            forward:false,
-            back:false,
-            turnLeft:false,
-            turnRight: false,
-            turnTurretLeft: false,
-            turnTurretRight: false,
-            shoot :false,
-            sequenceId: 0
-        }
+    //json object that represents the player's state of motion
+        this.forward = false,
+        this.back = false,
+        this.turnLeft = false,
+        this.turnRight = false,
+        this.turnTurretLeft = false,
+        this.turnTurretRight = false,
+        this.shoot = false,
+        this.sequenceId = 0
+
 
         //players
         this.players = {}
@@ -46,26 +46,26 @@ class Client{
        document.addEventListener('keydown', (event) => {
             switch(event.keyCode){
                 case 87:
-                    this.input.forward = true
+                    this.forward = true
                     break
                 case 83:
-                    this.input.back = true
+                    this.back = true
                     break
                 case 65:
-                    this.input.turnLeft = true
+                    this.turnLeft = true
                     break
                 case 68:
-                    this.input.turnRight = true
+                    this.turnRight = true
                     break
                 case 37:
-                    this.input.turnTurretLeft = true
+                    this.turnTurretLeft = true
                     break
                 case 39:
-                    this.input.turnTurretRight = true
+                    this.turnTurretRight = true
                     break
                 case 38:{
                
-                    this.input.shoot = true
+                    this.shoot = true
 
                     break
                 }
@@ -79,25 +79,25 @@ class Client{
             
             switch(event.keyCode){
                 case 87:
-                    this.input.forward = false
+                    this.forward = false
                     break
                 case 83:
-                    this.input.back = false
+                    this.back = false
                     break
                 case 65:
-                    this.input.turnLeft = false
+                    this.turnLeft = false
                     break
                 case 68:
-                    this.input.turnRight = false
+                    this.turnRight = false
                     break
                 case 37:
-                    this.input.turnTurretLeft = false
+                    this.turnTurretLeft = false
                     break
                 case 39:
-                    this.input.turnTurretRight = false
+                    this.turnTurretRight = false
                     break
                 case 38:{
-                    this.input.shoot = false
+                    this.shoot = false
                     break 
                 }
                 default:
@@ -129,17 +129,17 @@ class Client{
 
         if(!this.players[socket.id]) return
         
-        this.input.sequenceId++
-        
+        this.sequenceId++
+
         const movement = {
-            forward:this.input.forward,
-            back: this.input.back,
-            turnLeft: this.input.turnLeft,
-            turnRight: this.input.turnRight,
-            turnTurretLeft: this.input.turnTurretLeft,
-            turnTurretRight: this.input.turnTurretRight,
-            shoot : this.input.shoot,
-            sequenceId: this.input.sequenceId
+            forward:this.forward,
+            back: this.back,
+            turnLeft: this.turnLeft,
+            turnRight: this.turnRight,
+            turnTurretLeft:this.turnTurretLeft,
+            turnTurretRight:this.turnTurretRight,
+            shoot:this.shoot,
+            sequenceId: this.sequenceId
         }
         socket.emit('movement', movement)
         
@@ -187,7 +187,7 @@ class Client{
                     }
                 }
                 else{
-                 /*   p2.centerX = player.centerX
+                 /* p2.centerX = player.centerX
                     p2.centerY = player .centerY
                     p2.theta = player.theta
                     p2.turret.theta = player.turret.theta
