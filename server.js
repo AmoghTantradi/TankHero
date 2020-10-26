@@ -22,6 +22,7 @@ const server = http.Server(app)
 const io = socketIO(server)
 const game = new Engine()
 
+
 app.set('port',PORT)
 app.use('/client', express.static(__dirname + '/client')) //serves static folder not created yet
 app.use('/dist', express.static(path.join(__dirname, '/dist')))

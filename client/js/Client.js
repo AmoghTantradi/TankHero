@@ -6,7 +6,6 @@ class Client{
 
     constructor(ctx){
 
-    //json object that represents the player's state of motion
         this.forward = false,
         this.back = false,
         this.turnLeft = false,
@@ -15,7 +14,6 @@ class Client{
         this.turnTurretRight = false,
         this.shoot = false,
         this.sequenceId = 0
-
 
         //players
         this.players = {}
@@ -28,7 +26,10 @@ class Client{
 
         this.pendingInputs = []
 
+        //drawing
         this.brush = new Brush(ctx)
+
+        this.handle()
     }
 
     handle(){
@@ -101,16 +102,15 @@ class Client{
 
     update(socket){
     
- //       const current = Date.now()
-  //      this.dT = (current - this.last)
-   //     this.last = current
-    
+       const current = Date.now()
+       this.dT = (current - this.last)
+       this.last = current
 
 
        this.processInputs(socket)
        this.processServerMessages(socket)
      //  this.interpolatePlayers(socket)
-        this.draw()
+       this.draw()
 
     }
 
@@ -150,24 +150,27 @@ class Client{
 
     processServerMessages(socket){ //we have to remove players who have disconnected as well
         socket.on('state', (players) =>{
+            
 
+            /*
             for(let id in this.players){
                 if(!players[id]){
                     //remove the id if it is not there
                     delete this.players[id]
                 }
             }
+            */
 
             for(let id in players){
-                const player = players[id]
+                let  player = players[id]
 
                 if(!this.players[id]){
-                    const p = new Player(player.centerX, player.centerY, player.color, player.turretColor, player.name)
+                    let  p = new Player(player.centerX, player.centerY, player.color, player.turretColor, player.name)
                     this.players[id] = p
                     console.log('new player initialized', p.name)
                 }
 
-                const p2 = this.players[id]
+                let  p2 = this.players[id]
 
                 if(id === socket.id){
 

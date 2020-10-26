@@ -34,7 +34,7 @@ class Tank {
 
     //interpolation
 
-    this.bufferQueue = []
+    //this.bufferQueue = []
 
   }
 

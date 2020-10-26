@@ -14,13 +14,14 @@ class Engine{
 
         this.last = 0
         this.dT = 0 
+
         this.init()
     }
 
     init(){
         this.gameData.set('allied',0)
         this.gameData.set('axis', 0)
-        this.gameData.set('max',2)
+        this.gameData.set('max',1)
     }
 
     start(){
@@ -32,7 +33,6 @@ class Engine{
         this.players.clear() //kicks all the players out 
         this.last = 0 
         this.dT = 0
-
     }
 
 
@@ -101,7 +101,7 @@ class Engine{
         }
 
         if(socket){
-            socket.emit('gameState', this.gameState)
+            socket.emit('gameState', {gameState:this.gameState})
         }
         //updates the timestamp for when the last update happened
         const current = Date.now()

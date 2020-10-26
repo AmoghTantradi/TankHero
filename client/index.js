@@ -25,7 +25,7 @@ function sendName(){
         $('#name-prompt-container').empty()
         socket.emit('new-player', {name})
         client = new Client(ctx)
-        client.handle()
+      //  client.handle()
         $('#name-prompt-overlay').remove()
         $('#gameScreen').focus()
     }
