@@ -109,7 +109,6 @@ class Client{
 
        this.processInputs(socket)
        this.processServerMessages(socket)
-     //  this.interpolatePlayers(socket)
        this.draw()
 
     }
@@ -118,7 +117,7 @@ class Client{
     processInputs(socket){
 
         socket.on('gameState', (value) =>{
-            if(value !== 1){
+            if(value.gameState !== 1){
                 return
             }
         })
@@ -162,15 +161,15 @@ class Client{
             */
 
             for(let id in players){
-                let  player = players[id]
+                const  player = players[id]
 
                 if(!this.players[id]){
-                    let  p = new Player(player.centerX, player.centerY, player.color, player.turretColor, player.name)
+                    const p = new Player(player.centerX, player.centerY, player.color, player.turretColor, player.name)
                     this.players[id] = p
                     console.log('new player initialized', p.name)
                 }
 
-                let  p2 = this.players[id]
+                const p2 = this.players[id]
 
                 if(id === socket.id){
 

@@ -31,11 +31,6 @@ class Tank {
     //prediction and reconcilliation
 
     this.lastProcessedInput = 0
-
-    //interpolation
-
-    //this.bufferQueue = []
-
   }
 
 

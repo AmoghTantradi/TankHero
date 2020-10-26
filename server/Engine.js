@@ -99,9 +99,10 @@ class Engine{
             }
             return
         }
-
-        if(socket){
-            socket.emit('gameState', {gameState:this.gameState})
+        else {
+            if(socket){
+                socket.emit('gameState', {gameState:this.gameState})
+            }
         }
         //updates the timestamp for when the last update happened
         const current = Date.now()
