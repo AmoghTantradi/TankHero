@@ -19,8 +19,9 @@ class Client{
         this.players = {}
 
         //update times
-        this.last = 0
-        this.dT = 0
+
+        this.last = 0 
+        this.dT = 0 
 
         //prediction and reconcilliation
 
@@ -102,19 +103,23 @@ class Client{
 
     update(socket){
     
-       const current = Date.now()
-       this.dT = (current - this.last)
-       this.last = current
-
-
        this.processInputs(socket)
        this.processServerMessages(socket)
+       this.interpolatePlayers(socket)
        this.draw()
 
     }
 
 
     processInputs(socket){
+
+        let now = new Date()
+
+        let last = this.last || now
+
+        this.dT = (now - last)/10.0;
+        
+        this.last = now 
 
         socket.on('gameState', (value) =>{
             if(value.gameState !== 1){
@@ -129,21 +134,53 @@ class Client{
         
         this.sequenceId++
 
-        const movement = {
-            forward:this.forward,
-            back: this.back,
-            turnLeft: this.turnLeft,
-            turnRight: this.turnRight,
-            turnTurretLeft:this.turnTurretLeft,
-            turnTurretRight:this.turnTurretRight,
-            shoot:this.shoot,
-            sequenceId: this.sequenceId
-        }
-        socket.emit('movement', movement)
+    
+        socket.emit('movement',  {
+            val:{
+                forward:this.forward,
+                back: this.back,
+                turnLeft: this.turnLeft,
+                turnRight: this.turnRight,
+                turnTurretLeft:this.turnTurretLeft,
+                turnTurretRight:this.turnTurretRight,
+                shoot:this.shoot,
+                sequenceId: this.sequenceId,
+                dT: this.dT
+            },
+            sf: 1.0
+    })
+
+
+     
+        this.players[socket.id].applyInput( {
+            val:{
+                forward:this.forward,
+                back: this.back,
+                turnLeft: this.turnLeft,
+                turnRight: this.turnRight,
+                turnTurretLeft:this.turnTurretLeft,
+                turnTurretRight:this.turnTurretRight,
+                shoot:this.shoot,
+                sequenceId: this.sequenceId,
+                dT: this.dT
+            },
+            sf: 0.75
+    })
         
-        this.players[socket.id].applyInput(movement)
-        
-        this.pendingInputs.push(movement)
+        this.pendingInputs.push( {
+            val:{
+                forward:this.forward,
+                back: this.back,
+                turnLeft: this.turnLeft,
+                turnRight: this.turnRight,
+                turnTurretLeft:this.turnTurretLeft,
+                turnTurretRight:this.turnTurretRight,
+                shoot:this.shoot,
+                sequenceId: this.sequenceId,
+                dT: this.dT
+            },
+            sf: 1.0
+    })
         
     }
 
@@ -151,30 +188,29 @@ class Client{
         socket.on('state', (players) =>{
             
 
-            /*
             for(let id in this.players){
                 if(!players[id]){
                     //remove the id if it is not there
                     delete this.players[id]
                 }
             }
-            */
-
+    
             for(let id in players){
-                const  player = players[id]
+
+                let player = players[id]
 
                 if(!this.players[id]){
-                    const p = new Player(player.centerX, player.centerY, player.color, player.turretColor, player.name)
+                    let p = new Player(player.centerX, player.centerY, player.color, player.turretColor, player.name)
                     this.players[id] = p
                     console.log('new player initialized', p.name)
                 }
 
-                const p2 = this.players[id]
+                let p2 = this.players[id]
 
-                if(id === socket.id){
+                if(id == socket.id){
 
                     p2.centerX = player.centerX
-                    p2.centerY = player .centerY
+                    p2.centerY = player.centerY
                     p2.theta = player.theta
                     p2.turret.theta = player.turret.theta
                     p2.turret.active = player.turret.active
@@ -183,10 +219,9 @@ class Client{
 
                     let j = 0 
                     while (j < this.pendingInputs.length){
-                        const input = this.pendingInputs[j]
+                        let  input = this.pendingInputs[j]
                         if(this.sequenceId <= player.lastProcessedInput){
                             this.pendingInputs.splice(j, 1)
-                            j--
                             //delete inputs that are already processed
                         }
                         else{
@@ -196,16 +231,9 @@ class Client{
                         }
                     }
                 }
-                else{
-                    p2.centerX = player.centerX
-                    p2.centerY = player .centerY
-                    p2.theta = player.theta
-                    p2.turret.theta = player.turret.theta
-                    p2.turret.active = player.turret.active
-                    p2.health = player.health
-            
-               //     let timestamp = new Date()
-               //     p2.bufferQueue.push([timestamp, player.centerX, player.centerY, player.theta, player.turret.theta,player.turret.active])
+                else{          
+                    let timestamp = new Date()
+                    p2.bufferQueue.push([timestamp, player.centerX, player.centerY, player.theta, player.turret.theta,player.turret.active])
 //
                 }
 
@@ -228,8 +256,7 @@ class Client{
         for(let id in this.players){
             let player = this.players[id]
             
-            if(id === socket.id){
-                console.log('hello')
+            if(id == socket.id){
                 continue
             }
 

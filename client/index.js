@@ -43,7 +43,7 @@ setInterval( ()=>{
     if(client){
         client.update(socket)
     }
-    }, 1000 / 60);
+    }, 1000.0 / 60.0);
 
 socket.on('msg', (data)=>{ //this is used to communicate with the player
     window.alert(data)

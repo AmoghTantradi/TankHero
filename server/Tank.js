@@ -4,7 +4,7 @@ const Bullet = require('./Bullet')
 
 class Tank {
 
-  constructor(x=400, y=300, color='brown',turretColor='green', name='') {
+  constructor(x=400.0, y=300.0, color='brown',turretColor='green', name='') {
     this.name = name;
     this.dTheta = 1.0
     this.speed = 1.75;
@@ -17,20 +17,21 @@ class Tank {
     this.width = 40.0;
     this.height = 20.0;
     this.diagnol = Math.sqrt(Math.pow(20,2) + Math.pow(40,2))
-    this.theta = 0;
+    this.theta = 0.0;
     this.omega = Math.atan2(this.height, this.width) * 180.0/Math.PI
     this.centerX = x 
     this.centerY = y 
     this.turret = new Turret()
     this.hitbox = new Hitbox()
 
-    this.reloadTime = 1000 // 5 seconds 
-    this.lastShotTime = 0 
-    this.lastUpdateTime = 0 
+    this.reloadTime = 1000.0 // 5 seconds 
+    this.lastShotTime = 0.0
+    this.lastUpdateTime = 0.0
 
     //prediction and reconcilliation
 
-    this.lastProcessedInput = 0
+    this.bufferQueue = []
+    this.lastProcessedInput = 0.0
   }
 
 
@@ -55,33 +56,33 @@ class Tank {
 
   applyInput(data){
 
-    if(data.forward){//w key 
-      this.centerX += this.speed*Math.cos(this.theta*Math.PI/180.0)
-      this.centerY += this.speed*Math.sin(this.theta*Math.PI/180.0)
+    if(data.val.forward){//w key 
+      this.centerX += this.speed*Math.cos(this.theta*Math.PI/180.0)*data.val.dT*data.sf
+      this.centerY += this.speed*Math.sin(this.theta*Math.PI/180.0)*data.val.dT*data.sf
     }
-    if(data.back){//s key 
-        this.centerX -= this.speed*Math.cos(this.theta*Math.PI/180.0)
-        this.centerY -= this.speed*Math.sin(this.theta*Math.PI/180.0)
+    if(data.val.back){//s key 
+        this.centerX -= this.speed*Math.cos(this.theta*Math.PI/180.0)*data.val.dT*data.sf
+        this.centerY -= this.speed*Math.sin(this.theta*Math.PI/180.0)*data.val.dT*data.sf
     }
-    if(data.turnLeft){// a key 
+    if(data.val.turnLeft){// a key 
         //update x,y coordinates in rotation math
-        this.theta -= this.dTheta
-        this.theta %= 360
+        this.theta -= this.dTheta*data.val.dT*data.sf
+        this.theta %= 360.0
     }
-    if(data.turnRight){// d key 
+    if(data.val.turnRight){// d key 
         //update x,y coordinates with rotation math
-        this.theta += this.dTheta
-        this.theta %= 360
+        this.theta += this.dTheta*data.val.dT*data.sf
+        this.theta %= 360.0
     }
-    if(data.turnTurretLeft){//left arrow key 
-        this.turret.theta -= this.turret.dTheta
-        this.turret.theta %= 360
+    if(data.val.turnTurretLeft){//left arrow key 
+        this.turret.theta -= this.turret.dTheta*data.val.dT*data.sf
+        this.turret.theta %= 360.0
     }
-    if(data.turnTurretRight){//right arrow key 
-        this.turret.theta += this.turret.dTheta
-        this.turret.theta %= 360
+    if(data.val.turnTurretRight){//right arrow key 
+        this.turret.theta += this.turret.dTheta*data.val.dT*data.sf
+        this.turret.theta %= 360.0
     }
-    if(data.shoot){
+    if(data.val.shoot){
         this.shoot()
     }
 
