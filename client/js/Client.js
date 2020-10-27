@@ -18,11 +18,6 @@ class Client{
         //players
         this.players = {}
 
-        //update times
-
-        this.last = 0 
-        this.dT = 0 
-
         //prediction and reconcilliation
 
         this.pendingInputs = []
@@ -105,21 +100,12 @@ class Client{
     
        this.processInputs(socket)
        this.processServerMessages(socket)
-       this.interpolatePlayers(socket)
        this.draw()
 
     }
 
 
     processInputs(socket){
-
-        let now = new Date()
-
-        let last = this.last || now
-
-        this.dT = (now - last)/10.0;
-        
-        this.last = now 
 
         socket.on('gameState', (value) =>{
             if(value.gameState !== 1){
@@ -135,8 +121,8 @@ class Client{
         this.sequenceId++
 
     
-        socket.emit('movement',  {
-            val:{
+        socket.emit('movement',  
+            {
                 forward:this.forward,
                 back: this.back,
                 turnLeft: this.turnLeft,
@@ -146,14 +132,13 @@ class Client{
                 shoot:this.shoot,
                 sequenceId: this.sequenceId,
                 dT: this.dT
-            },
-            sf: 1.0
-    })
+            }
+        )
 
 
      
-        this.players[socket.id].applyInput( {
-            val:{
+        this.players[socket.id].applyInput( 
+            {
                 forward:this.forward,
                 back: this.back,
                 turnLeft: this.turnLeft,
@@ -163,12 +148,11 @@ class Client{
                 shoot:this.shoot,
                 sequenceId: this.sequenceId,
                 dT: this.dT
-            },
-            sf: 0.75
-    })
+            }
+        )
         
-        this.pendingInputs.push( {
-            val:{
+        this.pendingInputs.push( 
+            {
                 forward:this.forward,
                 back: this.back,
                 turnLeft: this.turnLeft,
@@ -178,9 +162,8 @@ class Client{
                 shoot:this.shoot,
                 sequenceId: this.sequenceId,
                 dT: this.dT
-            },
-            sf: 1.0
-    })
+            }
+        )
         
     }
 
@@ -224,9 +207,16 @@ class Client{
                     }
                 }
                 else{          
-                    let timestamp = new Date()
-                    p2.bufferQueue.push([timestamp, player.centerX, player.centerY, player.theta, player.turret.theta,player.turret.active])
-//
+                //    let timestamp = new Date()
+                 //   p2.bufferQueue.push([timestamp, player.centerX, player.centerY, player.theta, player.turret.theta,player.turret.active])
+                    
+                 p2.centerX = player.centerX
+                 p2.centerY = player.centerY
+                 p2.theta = player.theta
+                 p2.turret.theta = player.turret.theta
+                 p2.turret.active = player.turret.active
+                 p2.health = player.health
+
                 }
 
             }

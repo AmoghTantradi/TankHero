@@ -29,9 +29,7 @@ class Tank {
     this.lastUpdateTime = 0.0
 
     //prediction and reconcilliation
-
-    this.bufferQueue = []
-    this.lastProcessedInput = 0.0
+    this.lastProcessedInput = 0
   }
 
 
@@ -55,34 +53,33 @@ class Tank {
   }
 
   applyInput(data){
-
-    if(data.val.forward){//w key 
-      this.centerX += this.speed*Math.cos(this.theta*Math.PI/180.0)*data.val.dT*data.sf
-      this.centerY += this.speed*Math.sin(this.theta*Math.PI/180.0)*data.val.dT*data.sf
+    if(data.forward){//w key 
+      this.centerX += this.speed*Math.cos(this.theta*Math.PI/180.0)
+      this.centerY += this.speed*Math.sin(this.theta*Math.PI/180.0)
     }
-    if(data.val.back){//s key 
-        this.centerX -= this.speed*Math.cos(this.theta*Math.PI/180.0)*data.val.dT*data.sf
-        this.centerY -= this.speed*Math.sin(this.theta*Math.PI/180.0)*data.val.dT*data.sf
+    if(data.back){//s key 
+        this.centerX -= this.speed*Math.cos(this.theta*Math.PI/180.0)
+        this.centerY -= this.speed*Math.sin(this.theta*Math.PI/180.0)
     }
-    if(data.val.turnLeft){// a key 
+    if(data.turnLeft){// a key 
         //update x,y coordinates in rotation math
-        this.theta -= this.dTheta*data.val.dT*data.sf
+        this.theta -= this.dTheta
         this.theta %= 360.0
     }
-    if(data.val.turnRight){// d key 
+    if(data.turnRight){// d key 
         //update x,y coordinates with rotation math
-        this.theta += this.dTheta*data.val.dT*data.sf
+        this.theta += this.dTheta
         this.theta %= 360.0
     }
-    if(data.val.turnTurretLeft){//left arrow key 
-        this.turret.theta -= this.turret.dTheta*data.val.dT*data.sf
+    if(data.turnTurretLeft){//left arrow key 
+        this.turret.theta -= this.turret.dTheta
         this.turret.theta %= 360.0
     }
-    if(data.val.turnTurretRight){//right arrow key 
-        this.turret.theta += this.turret.dTheta*data.val.dT*data.sf
+    if(data.turnTurretRight){//right arrow key 
+        this.turret.theta += this.turret.dTheta
         this.turret.theta %= 360.0
     }
-    if(data.val.shoot){
+    if(data.shoot){
         this.shoot()
     }
 
