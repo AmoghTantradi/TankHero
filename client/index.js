@@ -14,7 +14,6 @@ $(()=>{
 
    
     const ctx = document.getElementById('gameScreen').getContext('2d')
-    const brush = new Brush(ctx)
     let client
     $('#name-input').focus();
 
@@ -39,7 +38,6 @@ $('#name-submit').click(sendName)
 
 
 setInterval( ()=>{
-    //if(client) socket.emit('movement', client.input);
     if(client){
         client.update(socket)
     }
