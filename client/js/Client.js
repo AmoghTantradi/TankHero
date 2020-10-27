@@ -187,14 +187,15 @@ class Client{
     processServerMessages(socket){ //we have to remove players who have disconnected as well
         socket.on('state', (players) =>{
             
-
+            /*
             for(let id in this.players){
                 if(!players[id]){
                     //remove the id if it is not there
                     delete this.players[id]
                 }
             }
-    
+            */
+           
             for(let id in players){
 
                 let player = players[id]
