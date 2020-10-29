@@ -78,7 +78,6 @@ class Engine{
         if(this.players.has(socket.id)){
             const player = this.players.get(socket.id)
             player.applyInput(data)
-            player.lastProcessedInput = data.sequenceId
         }
     }
 

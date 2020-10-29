@@ -90,9 +90,6 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 	
 
 	game.update()
-
-
-
 	count++
 
 //this is where big (O) complexity comes into play: we have to delete the bullets that are outside of the frame

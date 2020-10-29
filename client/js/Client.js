@@ -1,7 +1,6 @@
-
-
 const Player = require('../../server/Tank')
 const Brush = require('./Brush') 
+
 class Client{
 
     constructor(ctx){
@@ -13,14 +12,9 @@ class Client{
         this.turnTurretLeft = false,
         this.turnTurretRight = false,
         this.shoot = false,
-        this.sequenceId = 0
 
         //players
         this.players = {}
-
-        //prediction and reconcilliation
-
-        this.pendingInputs = []
 
         //drawing
         this.brush = new Brush(ctx)
@@ -118,8 +112,6 @@ class Client{
             return 
         }
         
-        this.sequenceId++
-
     
         socket.emit('movement',  
             {
@@ -129,98 +121,25 @@ class Client{
                 turnRight: this.turnRight,
                 turnTurretLeft:this.turnTurretLeft,
                 turnTurretRight:this.turnTurretRight,
-                shoot:this.shoot,
-                sequenceId: this.sequenceId
+                shoot:this.shoot
             }
-        )
-
-
-     
-        this.players[socket.id].applyInput( 
-            {
-                forward:this.forward,
-                back: this.back,
-                turnLeft: this.turnLeft,
-                turnRight: this.turnRight,
-                turnTurretLeft:this.turnTurretLeft,
-                turnTurretRight:this.turnTurretRight,
-                shoot:this.shoot,
-                sequenceId: this.sequenceId
-            }
-        )
-        
-        this.pendingInputs.push( 
-            {
-                forward:this.forward,
-                back: this.back,
-                turnLeft: this.turnLeft,
-                turnRight: this.turnRight,
-                turnTurretLeft:this.turnTurretLeft,
-                turnTurretRight:this.turnTurretRight,
-                shoot:this.shoot,
-                sequenceId: this.sequenceId
-            }
-        )
-        
+        )  
     }
 
     processServerMessages(socket){ //we have to remove players who have disconnected as well
         socket.on('state', (players) =>{
 
-            for(let id in players){
-
-                let player = players[id]
-
+            for(let id in this.players){
                 if(!this.players[id]){
-                    let p = new Player(player.centerX, player.centerY, player.color, player.turretColor, player.name)
-                    this.players[id] = p
-                    console.log('new player initialized', p.name)
+                    delete this.players[id]
                 }
-
-                let p2 = this.players[id]
-
-                if(id == socket.id){
-
-                    p2.centerX = player.centerX
-                    p2.centerY = player.centerY
-                    p2.theta = player.theta
-                    p2.turret.theta = player.turret.theta
-                    p2.turret.active = player.turret.active
-                    p2.health = player.health
-                
-
-                    let j = 0 
-                    while (j < this.pendingInputs.length){
-                        let  input = this.pendingInputs[j]
-                        if(this.sequenceId <= player.lastProcessedInput){
-                            this.pendingInputs.splice(j, 1)
-                            //delete inputs that are already processed
-                        }
-                        else{
-                            //not processed by server yet. re-apply it 
-                            p2.applyInput(input)
-                            j++
-                        }
-                    }
-                }
-                else{                
-                 p2.centerX = player.centerX
-                 p2.centerY = player.centerY
-                 p2.theta = player.theta
-                 p2.turret.theta = player.turret.theta
-                 p2.turret.active = player.turret.active
-                 p2.health = player.health
-
-                }
-
             }
 
-
-
-
-
-
-
+            for(let id in players){
+                const player = players[id]
+                this.players[id] = player
+            }
+            
         })
     }
 
