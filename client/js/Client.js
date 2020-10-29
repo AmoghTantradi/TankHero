@@ -1,4 +1,3 @@
-const Player = require('../../server/Tank')
 const Brush = require('./Brush') 
 
 class Client{
