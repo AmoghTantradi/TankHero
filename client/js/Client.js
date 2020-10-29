@@ -107,7 +107,6 @@ class Client{
         })
 
         if(!this.players[socket.id]){
-            console.log(socket.id, 'is not here')
             return 
         }
         
