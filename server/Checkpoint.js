@@ -11,16 +11,14 @@ class Checkpoint{
         
         this.hitbox = new Hitbox()
         this.capturingPlayers = new Set()
-        this.isCapturing = false
-        this.capturingTeam = null
-        
+
 
         this.progress = 0.0
         this.start  = 0.0
         this.lastUpdateTime = 0.0
-        this.captured = false
-        this.capturing = false
-
+        this.isCaptured = false   
+        this.isCapturing = false
+        this.capturingTeam = null
     }
 
     startCountdown(){
@@ -32,6 +30,10 @@ class Checkpoint{
     }
     //the team that got there first is the one that will have the checkpoint
     updateCheckpointStatus(playerDict){   
+
+        if(this.isCaptured){
+            return
+        }
 
         playerDict.forEach((player) => {
             
@@ -59,12 +61,15 @@ class Checkpoint{
     }
 
 
-    update (last, socket){
+    update (last, playerDict){
 
         this.lastUpdateTime = (start !== 0.0) ? last : 0.0
 
+        this.updateCheckpointStatus(playerDict)
+
         if(this.progress >= 1.0){
-            this.captured = true
+            this.isCaptured = true
+            this.stopCountdown()
         }
 
         this.progress = (this.lastUpdateTime - this.start)/this.delay
