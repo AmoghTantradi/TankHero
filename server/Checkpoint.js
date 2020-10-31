@@ -61,7 +61,7 @@ class Checkpoint{
 
     update (last, socket){
 
-        this.lastUpdateTime = last
+        this.lastUpdateTime = (start !== 0.0) ? last : 0.0
 
         if(this.progress >= 1.0){
             this.captured = true
