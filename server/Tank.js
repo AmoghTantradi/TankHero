@@ -37,7 +37,7 @@ class Tank {
       for(let i = 0 ; i < this.turret.active.length; i++){
 
 
-        if(this.hitbox.isOutside(0,0,800,600,this.turret.active[i], this.turret.active[i].dx, this.turret.active[i].dy)){
+        if(this.hitbox.isOutsideGamescreen(0,0,800,600,this.turret.active[i], this.turret.active[i].dx, this.turret.active[i].dy)){
           this.turret.active.splice(i, 1)
           i--
         }
