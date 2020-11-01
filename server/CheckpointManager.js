@@ -9,7 +9,7 @@ class CheckpointManager{
     }
 
     createRandomCheckpoint(){
-        this.createCheckpoint(Math.random() * (800 - 60) + 60, Math.random() * (600 - 60) + 60)
+        this.createCheckpoint(Math.random() * (800 - 120) + 60, Math.random() * (600 - 120) + 60)
     }
 
     createCheckpoint(centerX, centerY, delay=null){
