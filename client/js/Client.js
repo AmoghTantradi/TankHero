@@ -14,6 +14,7 @@ class Client{
 
         //players
         this.players = {}
+        this.checkpoints = []
 
         //drawing
         this.brush = new Brush(ctx)
@@ -125,8 +126,9 @@ class Client{
     }
 
     processServerMessages(socket){ //we have to remove players who have disconnected as well
-        socket.on('state', (players) =>{
-
+        socket.on('state', (data) =>{
+            this.checkpoints = data.checkpoints
+            const players = data.players
             for(let id in this.players){
                 if(!this.players[id]){
                     delete this.players[id]
@@ -146,10 +148,17 @@ class Client{
 
     draw(){
         this.brush.ctx.clearRect(0,0,800,600)
+
+        for(let i = 0 ; i < this.checkpoints.length; i++){
+            const checkpoint = this.checkpoints[i]
+            this.brush.drawCheckpoint(checkpoint)
+        }
+
         for(let id in this.players){
             const player = this.players[id]
             this.brush.draw(player)
         }
+   
     }
 
 }

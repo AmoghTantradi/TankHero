@@ -5,6 +5,18 @@ class Brush{
     }  
 
 
+      drawCheckpoint(checkpoint, ctx=this.ctx){
+        ctx.fillStyle = 'orange'
+        //console.log(checkpoint.centerX - checkpoint.radius, checkpoint.centerY - checkpoint.radius, checkpoint.radius, checkpoint.radius)
+        ctx.save()
+        ctx.translate(checkpoint.centerX, checkpoint.centerY)
+        ctx.fillRect(-checkpoint.radius, -checkpoint.radius, checkpoint.radius*2, checkpoint.radius*2)
+        ctx.translate(-checkpoint.centerX, -checkpoint.centerY)
+        ctx.restore()
+        return
+      }
+
+
       drawBullet(bullet,ctx){
         ctx.fillStyle = bullet.color
         ctx.save()

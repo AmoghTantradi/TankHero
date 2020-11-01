@@ -79,17 +79,17 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 
 	
 	if(Math.abs(sum - 1000) < dT) {
-		console.log('sum', sum, 'frames', count)
+	//	console.log('sum', sum, 'frames', count)
 		sum = 0 
 		count = 0
 	}
 
 	if(game.gameState === 1){
-		io.sockets.emit('state', fromEntries(game.players))
+		io.sockets.emit('state', {players:fromEntries(game.players), checkpoints:game.manager.checkpoints})
 	}
 	
 
-	game.update()
+	game.update(io.sockets)
 	count++
 
 //this is where big (O) complexity comes into play: we have to delete the bullets that are outside of the frame

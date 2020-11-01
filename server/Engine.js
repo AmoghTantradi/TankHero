@@ -1,11 +1,13 @@
 const Player = require('./Tank')
 const Hitbox = require('../lib/Hitbox')
+const CheckpointManager = require('./CheckpointManager')
 
 class Engine{
 
 
     constructor(){
         
+        this.manager = new CheckpointManager()
         this.hit= new Hitbox()
 
         this.players = new Map()
@@ -83,31 +85,23 @@ class Engine{
 
 
 
-    update(socket){
+    update(sockets){
         
         if(this.gameState === 0 ){
-            if(socket){
-                socket.emit('msg', 'The game has ended. Please feel free to refresh the browser and play again')
-            }
             return
-
         }
         else if(this.gameState === 2){
-            if(socket){
-                socket.emit('msg', 'The game has ended. Please feel free to refresh your browsers and play the game again')
+            if(sockets){
+                sockets.emit('msg', 'The game has ended. Please feel free to refresh your browsers and play the game again')
             }
             return
-        }
-        else {
-            if(socket){
-                socket.emit('gameState', {gameState:this.gameState})
-            }
         }
         //updates the timestamp for when the last update happened
         const current = Date.now()
         this.dT = (current - this.last)
         this.last = current
 
+        this.manager.update(this.last,this.players, sockets)
         this.players.forEach((player)=>{
             player.update(this.last, this.dT)
         })
