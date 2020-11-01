@@ -79,7 +79,7 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 
 	
 	if(Math.abs(sum - 1000) < dT) {
-	//	console.log('sum', sum, 'frames', count)
+		console.log('sum', sum, 'frames', count)
 		sum = 0 
 		count = 0
 	}
