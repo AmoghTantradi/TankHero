@@ -79,7 +79,7 @@ class Checkpoint{
             this.progress = (this.lastUpdateTime - this.start)/this.delay
         }
 
-        console.log('start', this.start,'last', this.lastUpdateTime,'progress',this.progress, 'is captured', this.isCaptured, 'is capturing', this.isCapturing)
+        //console.log('start', this.start,'last', this.lastUpdateTime,'progress',this.progress, 'is captured', this.isCaptured, 'is capturing', this.isCapturing)
     }
 
 }

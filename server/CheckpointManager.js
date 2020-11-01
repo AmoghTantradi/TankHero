@@ -38,7 +38,6 @@ class CheckpointManager{
                 socket.emit('msg', `A checkpoint has been captured by the ${team} team`)
                 this.checkpoints.splice(i, 1)
                 i--
-                console.log('checkpoints', this.checkpoints)
             }
 
         }
