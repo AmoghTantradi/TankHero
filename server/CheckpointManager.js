@@ -34,8 +34,9 @@ class CheckpointManager{
 
             if(this.checkpoints[i].isCaptured){
                 const team = this.checkpoints[i].capturingTeam
+                const message = `A checkpoint has been captured by the ${team} team`
                 this.scoreBoard.set(team, this.scoreBoard.get(team) + 10)
-                socket.emit('msg', `A checkpoint has been captured by the ${team} team`)
+                socket.emit('gameData',{message:message, date:Date.now()})
                 this.checkpoints.splice(i, 1)
                 i--
             }

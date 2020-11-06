@@ -1,4 +1,5 @@
 const Brush = require('./Brush') 
+const Text = require('./Text')
 
 class Client{
 
@@ -12,12 +13,16 @@ class Client{
         this.turnTurretRight = false,
         this.shoot = false,
 
-        //players
+        //players, checkpoints, and messages -- something the server sends to the frontend periodically
         this.players = {}
         this.checkpoints = []
 
         //drawing
         this.brush = new Brush(ctx)
+
+        //updating gState on client side
+
+        this.text = new Text()
 
         this.handle()
     }
@@ -91,7 +96,8 @@ class Client{
 
 
     update(socket){
-    
+       
+       this.text.update(socket)
        this.processInputs(socket)
        this.processServerMessages(socket)
        this.draw()

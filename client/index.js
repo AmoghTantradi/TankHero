@@ -6,7 +6,6 @@ const io = require('socket.io-client')
 
 
 const Client = require('./js/Client')
-const Brush = require('./js/Brush')
 
 
 $(()=>{
@@ -43,7 +42,7 @@ setInterval( ()=>{
     }
     }, 1000.0 / 60.0);
 
-socket.on('msg', (data)=>{ //this is used to communicate with the player
+socket.on('msg', (data)=>{ //this is used to communicate with the player (only for the start and the end for the game -- nothing in between)
     window.alert(data)
 })
     

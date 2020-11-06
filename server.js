@@ -88,7 +88,6 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 		io.sockets.emit('state', {players:fromEntries(game.players), checkpoints:game.manager.checkpoints})
 	}
 	
-
 	game.update(io.sockets)
 	count++
 
