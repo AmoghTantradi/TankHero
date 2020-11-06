@@ -12,13 +12,15 @@ class Text{
       //  this.scoreboard.removeAttribute()
         const message = data.message
         const date = data.date
-        if(!this.receivedMessages.has(date)){
+        const timestamp = data.timestamp
+        if(!this.receivedMessages.has(timestamp)){
             const messageElement = document.createElement('li')
+            messageElement.style.border = "1px solid black"
             messageElement.appendChild(
-                document.createTextNode(`${message}`)
+                document.createTextNode(`${message} : ${date}`)
             )
             this.messages.appendChild(messageElement)
-            this.receivedMessages.add(date)
+            this.receivedMessages.add(timestamp)
         }
     }
 
