@@ -1,7 +1,3 @@
-const PORT = process.env.PORT || 9000
-const FRAME_RATE = 1000 / 60 //60 fps
-
-
 //Dependencies
 const express = require('express');//helps build webserver
 const http = require('http');//helps build webserver
@@ -13,7 +9,7 @@ const socketIO = require('socket.io');//handles websockets on the server
 const Engine = require('./server/Engine')
 
 //lib dependencies
-
+const Constants = require('./lib/Constants')
 const fromEntries = require('./lib/util')
 
 //initializing components 
@@ -21,6 +17,11 @@ const app = express()
 const server = http.Server(app)
 const io = socketIO(server)
 const game = new Engine()
+
+
+const PORT = process.env.PORT || Constants.PORT
+const FRAME_RATE = 1000 / Constants.FPS //60 fps
+
 
 
 app.set('port',PORT)

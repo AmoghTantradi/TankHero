@@ -1,13 +1,17 @@
+const Constants = require('../lib/Constants')
 const Hitbox = require('../lib/Hitbox')
 
 class Checkpoint{
 
-    // delay is in milliseconds (default is 10 seconds)
-    constructor(centerX, centerY, delay=10000 ){   
+    // delay is in milliseconds (default is 5 seconds)
+    constructor(centerX, centerY, delay=Constants.CHECKPOINT_DELAY ){   
         this.centerX = centerX
         this.centerY = centerY
-        this.radius = 60 // 80px
         this.delay = delay
+
+
+        this.radius = Constants.CHECKPOINT_RADIUS// default is 60px
+        this.color = Constants.CHECKPOINT_DEFAULT_COLOR
         
         this.hitbox = new Hitbox()
         this.capturingPlayers = new Set()

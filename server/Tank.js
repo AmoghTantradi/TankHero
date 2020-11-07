@@ -1,30 +1,40 @@
+//game dependencies
 const Turret = require('./Turret')
-const Hitbox = require('../lib/Hitbox')
 const Bullet = require('./Bullet')
+
+//lib dependencies
+const Constants = require('../lib/Constants')
+const Hitbox = require('../lib/Hitbox')
 
 class Tank {
 
-  constructor(x=400.0, y=300.0, color='brown',turretColor='green', name='') {
+  constructor(x=Constants.TANK_DEFAULT_CENTER_X, y=Constants.TANK_DEFAULT_CENTER_Y, color=Constants.TANK_DEFAULT_COLOR,turretColor=Constants.TURRET_DEFAULT_COLOR, name) {
+    
+    this.centerX = x 
+    this.centerY = y 
+   
     this.name = name;
-    this.dTheta = 1.0
-    this.speed = 1.75;
     this.color =  color
     this.turretColor = turretColor
     this.team = (color === 'brown') ? ('axis') : 'allied'
-    this.health = 100;
-    this.maxPossibleHealth = 100
-    this.damage = 5;
-    this.width = 40.0;
-    this.height = 20.0;
-    this.diagnol = Math.sqrt(Math.pow(this.width,2) + Math.pow(this.height,2))
-    this.theta = 0.0;
-    this.omega = Math.atan2(this.height, this.width) * 180.0/Math.PI
-    this.centerX = x 
-    this.centerY = y 
+  
+
     this.turret = new Turret()
     this.hitbox = new Hitbox()
 
-    this.reloadTime = 1000.0 // 1 second
+    this.health = Constants.TANK_HEALTH
+    this.maxPossibleHealth = Constants.TANK_MAX_HEALTH
+    this.damage = Constants.TANK_DAMAGE
+    this.width = Constants.TANK_WIDTH
+    this.height = Constants.TANK_HEIGHT
+    this.dTheta = Constants.TANK_DTHETA
+    this.speed = Constants.TANK_SPEED
+    this.reloadTime = Constants.TANK_RELOAD_TIME// 1 second
+
+
+    this.diagnol = Math.sqrt(Math.pow(this.width,2) + Math.pow(this.height,2))
+    this.theta = 0.0;
+    this.omega = Math.atan2(this.height, this.width) * 180.0/Math.PI
     this.lastShotTime = 0.0
     this.lastUpdateTime = 0.0
   }

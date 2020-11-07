@@ -1,6 +1,10 @@
+//game dependencies
 const Player = require('./Tank')
-const Hitbox = require('../lib/Hitbox')
 const CheckpointManager = require('./CheckpointManager')
+
+//lib dependencies
+const Constants = require('../lib/Constants')
+const Hitbox = require('../lib/Hitbox')
 
 class Engine{
 
@@ -23,7 +27,7 @@ class Engine{
     init(){
         this.gameData.set('allied',0)
         this.gameData.set('axis', 0)
-        this.gameData.set('max',1)
+        this.gameData.set('max',Constants.MAX_PLAYERS)
     }
 
     start(){
@@ -37,17 +41,15 @@ class Engine{
         this.dT = 0
     }
 
-
-
     createPlayer(socket, name){
         if(this.gameData.get('allied') + this.gameData.get('axis') < this.gameData.get('max')){
 			if(this.gameData.get('allied') <= this.gameData.get('axis')){
-				this.players.set(socket.id,new Player(400,450,'black','grey', name))
+				this.players.set(socket.id,new Player(Constants.TANK_DEFAULT_CENTER_X,1.125*Constants.TANK_DEFAULT_CENTER_Y,'black','grey', name))
 				this.gameData.set('allied', this.gameData.get('allied')+1)
                 socket.emit('msg', 'Allied tank')
 			}
 			else{
-				this.players.set(socket.id, new Player(400,150,'brown','green', name))
+				this.players.set(socket.id, new Player(Constants.TANK_DEFAULT_CENTER_X,0.375*Constants.TANK_DEFAULT_CENTER_Y,'brown','green', name))
 				this.gameData.set('axis', this.gameData.get('axis')+1)
 				socket.emit('msg', 'Axis tank')
             }
@@ -60,7 +62,6 @@ class Engine{
 			console.log('Sorry there are too many players')
 			socket.emit('msg', 'Sorry, this lobby is full and the game has Started. Please wait until a player leaves the game')//this is only sent to the extra player who tries to join
         }
-        
         
     }
 
@@ -82,8 +83,6 @@ class Engine{
             player.applyInput(data)
         }
     }
-
-
 
     update(sockets){
         

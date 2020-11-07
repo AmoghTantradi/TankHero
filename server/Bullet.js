@@ -1,16 +1,25 @@
+const Constants = require('../lib/Constants')
+
 class Bullet{
     constructor(x,y,theta){
-        this.speed = 1.2
-        this.dx = 0 
-        this.dy = 0 
-        this.width = 5
-        this.height = 5
-        this.diagnol = Math.sqrt(Math.pow(this.width,2) + Math.pow(this.height,2))
+
         this.centerX = x
         this.centerY = y
-        this.theta = theta  
+
+        this.dx = 0 
+        this.dy = 0 
+        this.theta = theta
+
+
+        this.speed = Constants.BULLET_SPEED
+        this.color = Constants.BULLET_DEFAULT_COLOR
+        this.width = Constants.BULLET_WIDTH
+        this.height = Constants.BULLET_HEIGHT
+
+
+        this.diagnol = Math.sqrt(Math.pow(this.width,2) + Math.pow(this.height,2))
         this.omega = Math.atan2(this.height,this.width)*180.0/Math.PI
-        this.color = 'red'
+        
         
         this.last = 0
         this.dT = 0 

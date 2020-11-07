@@ -1,5 +1,10 @@
+//game dependencies
 const Checkpoint = require('./Checkpoint')
+
+//lib dependencies
+const Constants = require('../lib/Constants')
 const FromEntries = require('../lib/util')
+
 
 class CheckpointManager{
 
@@ -10,7 +15,7 @@ class CheckpointManager{
     }
 
     createRandomCheckpoint(){
-        this.createCheckpoint(Math.random() * (800 - 120) + 60, Math.random() * (600 - 120) + 60)
+        this.createCheckpoint(Math.random() * (Constants.WIDTH - 2*Constants.CHECKPOINT_RADIUS) + Constants.CHECKPOINT_RADIUS, Math.random() * (Constants.HEIGHT - 2*Constants.CHECKPOINT_RADIUS) + Constants.CHECKPOINT_RADIUS)
     }
 
     createCheckpoint(centerX, centerY, delay=null){
@@ -25,7 +30,7 @@ class CheckpointManager{
     update(last, playerDict, socket){
 
 
-        if(this.checkpoints.length < 1 ){
+        if(this.checkpoints.length < Constants.CHECKPOINT_NUMBER){
             this.createRandomCheckpoint()
         }
     

@@ -1,5 +1,9 @@
+//client-side dependencies
 const Brush = require('./Brush') 
 const Text = require('./Text')
+
+//lib dependencies
+const Constants = require('../../lib/Constants')
 
 class Client{
 
@@ -154,7 +158,7 @@ class Client{
    
 
     draw(){
-        this.brush.ctx.clearRect(0,0,800,600)
+        this.brush.ctx.clearRect(0,0,Constants.WIDTH,Constants.HEIGHT)
 
         for(let i = 0 ; i < this.checkpoints.length; i++){
             const checkpoint = this.checkpoints[i]

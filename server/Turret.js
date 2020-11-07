@@ -1,10 +1,13 @@
+const Constants = require('../lib/Constants')
+
 class Turret {
     constructor() {
       this.theta = 0;
-      this.dTheta = 2.0
-      this.width = 20
-      this.height = 20
       this.active = []
+
+      this.dTheta = Constants.TURRET_DTHETA
+      this.width = Constants.TURRET_WIDTH
+      this.height = Constants.TURRET_HEIGHT
     }
 
 

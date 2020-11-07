@@ -1,3 +1,5 @@
+const Constants = require('../../lib/Constants')
+
 class Brush{
 
     constructor(ctx){
@@ -6,7 +8,7 @@ class Brush{
 
 
       drawCheckpointProgressBar(checkpoint, ctx = this.ctx){
-        ctx.fillStyle = 'seagreen'
+        ctx.fillStyle = Constants.CHECKPOINT_PROGRESSBAR_COLOR
         const progressRatio = checkpoint.progress
         const length = checkpoint.radius*2*progressRatio
         ctx.fillRect(-checkpoint.radius, -checkpoint.radius*2*3/4, length, 2)
@@ -14,8 +16,7 @@ class Brush{
       }
 
       drawCheckpoint(checkpoint, ctx=this.ctx){
-        ctx.fillStyle = 'orange'
-        //console.log(checkpoint.centerX - checkpoint.radius, checkpoint.centerY - checkpoint.radius, checkpoint.radius, checkpoint.radius)
+        ctx.fillStyle = checkpoint.color
         ctx.save()
         ctx.translate(checkpoint.centerX, checkpoint.centerY)
         ctx.fillRect(-checkpoint.radius, -checkpoint.radius, checkpoint.radius*2, checkpoint.radius*2)
@@ -38,13 +39,13 @@ class Brush{
     }
     
       drawPlayerName(player, ctx){
-        ctx.fillStyle = 'black'
+        ctx.fillStyle = Constants.PLAYER_NAME_COLOR
         ctx.fillText(player.name,player.centerX - 3*player.width/2,player.centerY - 3*player.height/2, player.name.length*10, 50)
         return
       }
     //draw this behind the player
       drawPlayerHealthbar(player,ctx){
-        ctx.fillStyle = 'blue'
+        ctx.fillStyle = Constants.PLAYER_HEALTHBAR_COLOR
         const ratio = player.health/player.maxPossibleHealth
         let height = player.height
         if(ratio < 0){
