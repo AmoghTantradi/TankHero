@@ -40,32 +40,12 @@
 
   #scoreboardContainer{
     width: 200px;
-    height: 150px;
+    height: 596px;
+    padding: 0;
     border: 1px solid black;
   }
 
-  
-  #scoreboardContainer h3{
-    height: 50px;
-    padding: 5px;
-  }
 
-
-  #scoreboard{
-    height: 100px;
-    margin: 0;
-    padding: 5px;
-  }
-
-
-  #scoreboard li{
-    list-style-type: none;
-    background-color: #b9b9b9;
-    margin-right: 5px;
-    padding: 3px;
-
-    border-radius: 2px;
-  }
 
   #messageContainer{
     width: 200px;
@@ -85,6 +65,7 @@
   #messages li{
     list-style-type: none;
     padding: 5px;
+    border: 1px solid black;
   }
 
 

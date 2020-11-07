@@ -1,10 +1,11 @@
 const Checkpoint = require('./Checkpoint')
+const FromEntries = require('../lib/util')
 
 class CheckpointManager{
 
     constructor(){
 
-        this.scoreBoard = new Map([['allied', 0],['axis',0]])
+        this.scoreboard = new Map([['allied', 0],['axis',0]])
         this.checkpoints = []
     }
 
@@ -35,8 +36,8 @@ class CheckpointManager{
             if(this.checkpoints[i].isCaptured){
                 const team = this.checkpoints[i].capturingTeam
                 const message = `A checkpoint has been captured by the ${team} team`
-                this.scoreBoard.set(team, this.scoreBoard.get(team) + 10)
-                socket.emit('gameData',{message:message, date:new Date().toISOString(), timestamp:new Date().getTime()})
+                this.scoreboard.set(team, this.scoreboard.get(team) + 10)
+                socket.emit('gameData',{message:message, scoreboard:FromEntries(this.scoreboard),  date:new Date().toISOString(), timestamp:new Date().getTime()})
                 this.checkpoints.splice(i, 1)
                 i--
             }
