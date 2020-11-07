@@ -5,12 +5,24 @@ class Brush{
     }  
 
 
+      drawCheckpointProgressBar(checkpoint, ctx = this.ctx){
+        ctx.fillStyle = 'seagreen'
+        const progressRatio = checkpoint.progress
+        const length = checkpoint.radius*2*progressRatio
+        
+        
+        ctx.fillRect(-checkpoint.radius, -checkpoint.radius*2*3/4, length, 2)
+        
+        return
+      }
+
       drawCheckpoint(checkpoint, ctx=this.ctx){
         ctx.fillStyle = 'orange'
         //console.log(checkpoint.centerX - checkpoint.radius, checkpoint.centerY - checkpoint.radius, checkpoint.radius, checkpoint.radius)
         ctx.save()
         ctx.translate(checkpoint.centerX, checkpoint.centerY)
         ctx.fillRect(-checkpoint.radius, -checkpoint.radius, checkpoint.radius*2, checkpoint.radius*2)
+        this.drawCheckpointProgressBar(checkpoint)
         ctx.translate(-checkpoint.centerX, -checkpoint.centerY)
         ctx.restore()
         return

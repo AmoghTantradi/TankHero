@@ -135,6 +135,7 @@ class Client{
         socket.on('state', (data) =>{
             this.checkpoints = data.checkpoints
             const players = data.players
+            
             for(let id in this.players){
                 if(!this.players[id]){
                     delete this.players[id]
