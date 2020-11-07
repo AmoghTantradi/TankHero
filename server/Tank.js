@@ -16,7 +16,7 @@ class Tank {
     this.damage = 5;
     this.width = 40.0;
     this.height = 20.0;
-    this.diagnol = Math.sqrt(Math.pow(20,2) + Math.pow(40,2))
+    this.diagnol = Math.sqrt(Math.pow(this.width,2) + Math.pow(this.height,2))
     this.theta = 0.0;
     this.omega = Math.atan2(this.height, this.width) * 180.0/Math.PI
     this.centerX = x 
@@ -24,7 +24,7 @@ class Tank {
     this.turret = new Turret()
     this.hitbox = new Hitbox()
 
-    this.reloadTime = 1000.0 // 5 seconds 
+    this.reloadTime = 1000.0 // 1 second
     this.lastShotTime = 0.0
     this.lastUpdateTime = 0.0
   }
@@ -54,7 +54,7 @@ class Tank {
       this.centerX += this.speed*Math.cos(this.theta*Math.PI/180.0)
       this.centerY += this.speed*Math.sin(this.theta*Math.PI/180.0)
     }
-    if(data.back){//s key 
+    if(data.back){//s key TANK_THETA: 0.0,
         this.centerX -= this.speed*Math.cos(this.theta*Math.PI/180.0)
         this.centerY -= this.speed*Math.sin(this.theta*Math.PI/180.0)
     }

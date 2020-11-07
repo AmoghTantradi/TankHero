@@ -26,6 +26,6 @@ module.exports = {
           chunkFilename: '[id].css'
         })
       ],
-   //   devtool: 'cheap-eval-source-map',
       mode: 'development'
+      //change to 'production' later
   };
