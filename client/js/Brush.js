@@ -9,10 +9,7 @@ class Brush{
         ctx.fillStyle = 'seagreen'
         const progressRatio = checkpoint.progress
         const length = checkpoint.radius*2*progressRatio
-        
-        
         ctx.fillRect(-checkpoint.radius, -checkpoint.radius*2*3/4, length, 2)
-        
         return
       }
 
