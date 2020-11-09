@@ -15,7 +15,7 @@ class CheckpointManager{
     }
 
     createRandomCheckpoint(){
-        this.createCheckpoint(Math.random() * (Constants.WIDTH - 2*Constants.CHECKPOINT_RADIUS) + Constants.CHECKPOINT_RADIUS, Math.random() * (Constants.HEIGHT - 2*Constants.CHECKPOINT_RADIUS) + Constants.CHECKPOINT_RADIUS)
+        this.createCheckpoint(Math.random() * (Constants.WIDTH - 2*Constants.CHECKPOINT_RADIUS) + Constants.CHECKPOINT_RADIUS, Math.random() * (Constants.HEIGHT - 5/2*Constants.CHECKPOINT_RADIUS) + Constants.CHECKPOINT_RADIUS*3/2) // leaving gap of 0.25*checkpoint radias between the edge of the screen and the healthbar
     }
 
     createCheckpoint(centerX, centerY, delay=null){
