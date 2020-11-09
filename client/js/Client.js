@@ -111,18 +111,11 @@ class Client{
 
     processInputs(socket){
 
-        socket.on('gameState', (value) =>{
-            if(value.gameState !== 1){
-                return
-            }
-        })
-
         if(!this.players[socket.id]){
             return 
         }
         
-    
-        socket.emit('movement',  
+        socket.emit(Constants.SOCKET_MOVEMENT,  
             {
                 forward:this.forward,
                 back: this.back,
@@ -136,7 +129,7 @@ class Client{
     }
 
     processServerMessages(socket){ //we have to remove players who have disconnected as well
-        socket.on('state', (data) =>{
+        socket.on(Constants.SOCKET_STATE, (data) =>{
             this.checkpoints = data.checkpoints
             const players = data.players
             

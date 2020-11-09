@@ -1,19 +1,19 @@
+//dependencies
 require('./css/styles.css')
-
 const $ = require('jquery')
-
 const io = require('socket.io-client')
 
-
+//game dependencies
 const Client = require('./js/Client')
 
+//lib dependencies
+const Constants = require('../lib/Constants')
 
 $(()=>{
     const socket = io()
-
-   
     const ctx = document.getElementById('gameScreen').getContext('2d')
-    let client
+    let client = null
+
     $('#name-input').focus();
 
 function sendName(){
@@ -21,7 +21,7 @@ function sendName(){
 
     if(name && name.length < 20){
         $('#name-prompt-container').empty()
-        socket.emit('new-player', {name})
+        socket.emit(Constants.SOCKET_NEW_PLAYER, {name})
         client = new Client(ctx)
         $('#name-prompt-overlay').remove()
         $('#gameScreen').focus()
@@ -42,7 +42,7 @@ setInterval( ()=>{
     }
     }, 1000.0 / 60.0);
 
-socket.on('msg', (data)=>{ //this is used to communicate with the player (only for the start and the end for the game -- nothing in between)
+socket.on(Constants.SOCKET_MSG, (data)=>{ //this is used to communicate with the player (only for the start and the end for the game -- nothing in between)
     window.alert(data)
 })
     

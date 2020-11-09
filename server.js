@@ -36,17 +36,17 @@ app.get('/', (request,res) => {
 
 //adding websocket handlers
 
-io.on('connection',(socket)=>{
+io.on(Constants.SOCKET_CONNECT,(socket)=>{
 	console.log('succesfully connected!')
 
 
-	socket.on('new-player',(data)=>{
+	socket.on(Constants.SOCKET_NEW_PLAYER,(data)=>{
 		game.createPlayer(socket, data.name) 
 	})
 
-	socket.on('movement', (data) =>{
+	socket.on(Constants.SOCKET_MOVEMENT, (data) =>{
 		if(game.gameState === 0){
-			socket.emit('msg', 'sorry but the game has not yet begun. Please wait for more players to join')
+			socket.emit(Constants.SOCKET_MSG, 'sorry but the game has not yet begun. Please wait for more players to join')
 		}
 		else {
 			game.updatePlayerMovement(socket, data)
@@ -54,7 +54,7 @@ io.on('connection',(socket)=>{
 	})
 
 
-	socket.on('disconnect', ()=>{
+	socket.on(Constants.SOCKET_DISCONNECT, ()=>{
 		game.removePlayer(socket)
 	})
 
@@ -62,7 +62,7 @@ io.on('connection',(socket)=>{
 })
 
 
-let last = (new Date()).getTime()
+let last = Date.now()
 
 let sum = 0 
 
@@ -70,7 +70,7 @@ let count = 0
 
 setInterval(()=>{  //we have to update the bullets and also handle the logic if a tank gets hit by a bullet 
 	
-	const current = (new Date()).getTime()
+	const current = Date.now()
 
 	const dT = current - last
 
@@ -86,7 +86,10 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 	}
 
 	if(game.gameState === 1){
-		io.sockets.emit('state', {players:fromEntries(game.players), checkpoints:game.manager.checkpoints})
+		io.sockets.emit(Constants.SOCKET_STATE, {
+			players:fromEntries(game.players), 
+			checkpoints:game.manager.checkpoints
+		})
 	}
 	
 	game.update(io.sockets)

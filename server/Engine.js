@@ -46,21 +46,21 @@ class Engine{
 			if(this.gameData.get('allied') <= this.gameData.get('axis')){
 				this.players.set(socket.id,new Player(Constants.TANK_DEFAULT_CENTER_X,1.125*Constants.TANK_DEFAULT_CENTER_Y,'black','grey', name))
 				this.gameData.set('allied', this.gameData.get('allied')+1)
-                socket.emit('msg', 'Allied tank')
+                socket.emit(Constants.SOCKET_MSG, 'Allied tank')
 			}
 			else{
 				this.players.set(socket.id, new Player(Constants.TANK_DEFAULT_CENTER_X,0.375*Constants.TANK_DEFAULT_CENTER_Y,'brown','green', name))
 				this.gameData.set('axis', this.gameData.get('axis')+1)
-				socket.emit('msg', 'Axis tank')
+				socket.emit(Constants.SOCKET_MSG, 'Axis tank')
             }
             if(this.gameData.get('allied') + this.gameData.get('axis') ===  this.gameData.get('max')){
-                socket.emit('msg','Now that all players have joined, this game will start. Use WASD and arrow keys to move your tank and its turret. Press the front arrow key to shoot. There is a reload time of 1 second.')
+                socket.emit(Constants.SOCKET_MSG,'Now that all players have joined, this game will start. Use WASD and arrow keys to move your tank and its turret. Press the front arrow key to shoot. There is a reload time of 1 second.')
                 this.start()
             }
 		}
 		else{
 			console.log('Sorry there are too many players')
-			socket.emit('msg', 'Sorry, this lobby is full and the game has Started. Please wait until a player leaves the game')//this is only sent to the extra player who tries to join
+			socket.emit(Constants.SOCKET_MSG, 'Sorry, this lobby is full and the game has Started. Please wait until a player leaves the game')//this is only sent to the extra player who tries to join
         }
         
     }
@@ -91,7 +91,7 @@ class Engine{
         }
         else if(this.gameState === 2){
             if(sockets){
-                sockets.emit('msg', 'The game has ended. Please feel free to refresh your browsers and play the game again')
+                sockets.emit(Constants.SOCKET_MSG, 'The game has ended. Please feel free to refresh your browsers and play the game again')
             }
             return
         }
