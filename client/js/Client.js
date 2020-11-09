@@ -134,7 +134,7 @@ class Client{
             const players = data.players
             
             for(let id in this.players){
-                if(!this.players[id]){
+                if(!players[id]){
                     delete this.players[id]
                 }
             }

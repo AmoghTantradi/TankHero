@@ -36,6 +36,7 @@ class Engine{
     }
 
     end(){
+        this.init()
         this.players.clear() //kicks all the players out 
         this.last = 0 
         this.dT = 0
@@ -56,21 +57,21 @@ class Engine{
             if(this.gameData.get('allied') + this.gameData.get('axis') ===  this.gameData.get('max')){
                 socket.emit(Constants.SOCKET_MSG,'Now that all players have joined, this game will start. Use WASD and arrow keys to move your tank and its turret. Press the front arrow key to shoot. There is a reload time of 1 second.')
                 this.start()
+                console.log('started')
             }
 		}
 		else{
 			console.log('Sorry there are too many players')
-			socket.emit(Constants.SOCKET_MSG, 'Sorry, this lobby is full and the game has Started. Please wait until a player leaves the game')//this is only sent to the extra player who tries to join
+			socket.emit(Constants.SOCKET_MSG, 'Sorry, this lobby is full and the game has Started. Please wait until a player leaves the game.')//this is only sent to the extra player who tries to join
         }
         
     }
 
     removePlayer(socket){
        if(this.players.has(socket.id))
-       {
-           const team = this.players.get(socket.id).team
-           this.players.delete(socket.id)
-           this.gameData.set(team, this.gameData.get(team)-1)
+       {    
+            this.end()
+            this.gameState = 2
            console.log('deleted player')
        }
     }
@@ -90,9 +91,12 @@ class Engine{
             return
         }
         else if(this.gameState === 2){
+           
             if(sockets){
-                sockets.emit(Constants.SOCKET_MSG, 'The game has ended. Please feel free to refresh your browsers and play the game again')
+                sockets.emit(Constants.SOCKET_MSG, 'The game has ended. Please feel free to refresh your browsers and play the game again.')
             }
+
+            this.gameState = 0
             return
         }
         //updates the timestamp for when the last update happened

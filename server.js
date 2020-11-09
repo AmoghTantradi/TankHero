@@ -1,9 +1,8 @@
 //Dependencies
-const express = require('express');//helps build webserver
-const http = require('http');//helps build webserver
-const path = require('path');
-const socketIO = require('socket.io');//handles websockets on the server
-
+const express = require('express')//helps build webserver
+const http = require('http')//helps build webserver
+const path = require('path')
+const socketIO = require('socket.io')//handles websockets on the server
 
 //game dependencies
 const Engine = require('./server/Engine')
@@ -38,26 +37,23 @@ app.get('/', (request,res) => {
 
 io.on(Constants.SOCKET_CONNECT,(socket)=>{
 	console.log('succesfully connected!')
-
-
+	
 	socket.on(Constants.SOCKET_NEW_PLAYER,(data)=>{
 		game.createPlayer(socket, data.name) 
 	})
 
 	socket.on(Constants.SOCKET_MOVEMENT, (data) =>{
 		if(game.gameState === 0){
-			socket.emit(Constants.SOCKET_MSG, 'sorry but the game has not yet begun. Please wait for more players to join')
+			socket.emit(Constants.SOCKET_MSG, 'Sorry but the game has not yet begun. Please refresh your browser and  wait for more players to join.')
 		}
 		else {
 			game.updatePlayerMovement(socket, data)
 		}
 	})
 
-
 	socket.on(Constants.SOCKET_DISCONNECT, ()=>{
 		game.removePlayer(socket)
 	})
-
 	
 })
 
@@ -78,9 +74,8 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 
 	sum += dT
 
-	
 	if(Math.abs(sum - 1000) < dT) {
-		console.log('sum', sum, 'frames', count)
+	//	console.log('sum', sum, 'frames', count)
 		sum = 0 
 		count = 0
 	}
@@ -98,10 +93,7 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 //this is where big (O) complexity comes into play: we have to delete the bullets that are outside of the frame
 }, FRAME_RATE)
 
-
-
 //starting server
-
 server.listen(PORT, ()=>{
 	console.log('Starting server on port',PORT)
 })
