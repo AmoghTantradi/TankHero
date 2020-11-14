@@ -54,11 +54,12 @@ class Engine{
 				this.gameData.set('axis', this.gameData.get('axis')+1)
 				socket.emit(Constants.SOCKET_MSG, 'Axis tank')
             }
-            if(this.gameData.get('allied') + this.gameData.get('axis') ===  this.gameData.get('max')){
+        /*    if(this.gameData.get('allied') + this.gameData.get('axis') ===  this.gameData.get('max')){
                 socket.emit(Constants.SOCKET_MSG,'Now that all players have joined, this game will start. Use WASD and arrow keys to move your tank and its turret. Press the front arrow key to shoot. There is a reload time of 1 second.')
                 this.start()
                 console.log('started')
             }
+        */
 		}
 		else{
 			console.log('Sorry there are too many players')
@@ -87,8 +88,13 @@ class Engine{
 
     update(sockets){
         
-        if(this.gameState === 0 ){
+        if(this.gameState === 0 && !(this.gameData.get('allied') + this.gameData.get('axis') ===  this.gameData.get('max'))){
             return
+        }
+        else if(this.gameState === 0 && (this.gameData.get('allied') + this.gameData.get('axis') ===  this.gameData.get('max'))){
+            sockets.emit(Constants.SOCKET_MSG,'Now that all players have joined, this game will start. Use WASD and arrow keys to move your tank and its turret. Press the front arrow key to shoot. There is a reload time of 1 second.')
+            this.start()
+            console.log('started')
         }
         else if(this.gameState === 2){
            
