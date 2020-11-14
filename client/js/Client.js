@@ -130,8 +130,8 @@ class Client{
 
     processServerMessages(socket){ //we have to remove players who have disconnected as well
         socket.on(Constants.SOCKET_STATE, (data) =>{
-            this.checkpoints = data.checkpoints
             const players = data.players
+            this.checkpoints = data.checkpoints
             
             for(let id in this.players){
                 if(!players[id]){

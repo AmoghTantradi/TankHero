@@ -40,13 +40,14 @@ class Brush{
     
       drawPlayerName(player, ctx){
         ctx.fillStyle = Constants.PLAYER_NAME_COLOR
-        ctx.fillText(player.name,player.centerX - 3*player.width/2,player.centerY - 3*player.height/2, player.name.length*10, 50)
+        const status = (player.health > 0) ? 'Alive' : `Dead : Will respawn in ${(Constants.TANK_RESPAWN_TIME - ( Date.now() - player.timeOfDeath))/1000.0} seconds`
+        ctx.fillText(`${player.name} : ${status}`,player.centerX - 3*player.width/2,player.centerY - 3*player.height/2, 500, 50)
         return
       }
     //draw this behind the player
       drawPlayerHealthbar(player,ctx){
         ctx.fillStyle = Constants.PLAYER_HEALTHBAR_COLOR
-        const ratio = player.health/player.maxPossibleHealth
+        const ratio = player.health/Constants.TANK_MAX_HEALTH
         let height = player.height
         if(ratio < 0){
             height = 0.1

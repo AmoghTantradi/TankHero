@@ -22,14 +22,12 @@ class Tank {
     this.turret = new Turret()
     this.hitbox = new Hitbox()
 
-    this.health = Constants.TANK_HEALTH
-    this.maxPossibleHealth = Constants.TANK_MAX_HEALTH
+    this.health = Constants.TANK_MAX_HEALTH
     this.damage = Constants.TANK_DAMAGE
     this.width = Constants.TANK_WIDTH
     this.height = Constants.TANK_HEIGHT
     this.dTheta = Constants.TANK_DTHETA
     this.speed = Constants.TANK_SPEED
-    this.reloadTime = Constants.TANK_RELOAD_TIME// 1 second
 
 
     this.diagnol = Math.sqrt(Math.pow(this.width,2) + Math.pow(this.height,2))
@@ -37,17 +35,29 @@ class Tank {
     this.omega = Math.atan2(this.height, this.width) * 180.0/Math.PI
     this.lastShotTime = 0.0
     this.lastUpdateTime = 0.0
-  }
 
+    this.timeOfDeath = null
+    this.smoke = false
+  }
 
   update(last,dT){
 
       this.lastUpdateTime = last
 
+      if(this.health <= 0 && !this.timeOfDeath) {
+        this.timeOfDeath = Date.now()
+        console.log('time of death', this.timeOfDeath)
+      }
+      else if(this.health <= 0 && this.timeOfDeath && (Date.now() - this.timeOfDeath) >= Constants.TANK_RESPAWN_TIME){
+        this.timeOfDeath = null
+        this.smoke = false
+        this.health = Constants.TANK_MAX_HEALTH
+      }
+
       for(let i = 0 ; i < this.turret.active.length; i++){
 
 
-        if(this.hitbox.isOutsideGamescreen(0,0,800,600,this.turret.active[i], this.turret.active[i].dx, this.turret.active[i].dy)){
+        if(this.hitbox.isOutsideGamescreen(0,0,Constants.WIDTH,Constants.HEIGHT,this.turret.active[i], this.turret.active[i].dx, this.turret.active[i].dy)){
           this.turret.active.splice(i, 1)
           i--
         }
@@ -60,6 +70,9 @@ class Tank {
   }
 
   applyInput(data){
+
+    if(this.health <= 0) return //don't apply input until the player health is restored
+
     if(data.forward){//w key 
       this.centerX += this.speed*Math.cos(this.theta*Math.PI/180.0)
       this.centerY += this.speed*Math.sin(this.theta*Math.PI/180.0)
@@ -92,10 +105,9 @@ class Tank {
 
   }
 
-
   shoot(){
     
-    if(this.lastUpdateTime > this.lastShotTime + this.reloadTime){
+    if(this.lastUpdateTime > this.lastShotTime + Constants.TANK_RELOAD_TIME){
       this.turret.active.push(new Bullet(this.centerX+2.0*this.turret.width*Math.cos((this.turret.theta+this.theta)*Math.PI/180.0), this.centerY+2.0*this.turret.width*Math.sin((this.turret.theta + this.theta)*Math.PI/180.0), this.turret.theta+this.theta))
       this.lastShotTime = this.lastUpdateTime
     }
