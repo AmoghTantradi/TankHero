@@ -40,7 +40,8 @@ class Brush{
     
       drawPlayerName(player, ctx){
         ctx.fillStyle = Constants.PLAYER_NAME_COLOR
-        const status = (player.health > 0) ? 'Alive' : `Dead : Will respawn in ${(Constants.TANK_RESPAWN_TIME - ( Date.now() - player.timeOfDeath))/1000.0} seconds`
+        const seconds = ((Constants.TANK_RESPAWN_TIME - ( Date.now() - player.timeOfDeath))/1000 )
+        const status = (player.health > 0) ? 'Alive' : `Dead : Will respawn in ${(seconds >= 0) ? seconds : 0} seconds`
         ctx.fillText(`${player.name} : ${status}`,player.centerX - 3*player.width/2,player.centerY - 3*player.height/2, 500, 50)
         return
       }

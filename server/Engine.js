@@ -36,8 +36,9 @@ class Engine{
     }
 
     end(){
-        this.init()
+        this.init() // initializes gameData
         this.players.clear() //kicks all the players out 
+        this.manager = new CheckpointManager() //creates new checkpoint manager
         this.last = 0 
         this.dT = 0
     }
@@ -54,12 +55,6 @@ class Engine{
 				this.gameData.set('axis', this.gameData.get('axis')+1)
 				socket.emit(Constants.SOCKET_MSG, 'Axis tank')
             }
-        /*    if(this.gameData.get('allied') + this.gameData.get('axis') ===  this.gameData.get('max')){
-                socket.emit(Constants.SOCKET_MSG,'Now that all players have joined, this game will start. Use WASD and arrow keys to move your tank and its turret. Press the front arrow key to shoot. There is a reload time of 1 second.')
-                this.start()
-                console.log('started')
-            }
-        */
 		}
 		else{
 			console.log('Sorry there are too many players')
@@ -73,7 +68,7 @@ class Engine{
        {    
             this.end()
             this.gameState = 2
-           console.log('deleted player')
+           console.log('ended game due to player leaving')
        }
     }
 
@@ -99,9 +94,20 @@ class Engine{
         else if(this.gameState === 2){
            
             if(sockets){
-                sockets.emit(Constants.SOCKET_MSG, 'The game has ended. Please feel free to refresh your browsers and play the game again.')
+                const message = 'The game has unexpectedly ended. Please refresh your browsers to play the game again.'
+                sockets.emit(Constants.SOCKET_MSG, message)
             }
-
+            
+            this.end()
+            this.gameState = 0
+            return
+        }
+        else if(this.manager.scoreboard.get('allied') === 100 || this.manager.scoreboard.get('axis') === 100){
+            const message = `The ${(this.manager.scoreboard.get('allied') === 100) ? 'allied' : 'axis'} team has won. Please refresh your browsers to play the game again.`
+            if(sockets){
+                sockets.emit(Constants.SOCKET_MSG, message)
+            }
+            this.end()
             this.gameState = 0
             return
         }
