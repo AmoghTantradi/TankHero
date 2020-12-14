@@ -54,6 +54,8 @@ class Tank {
         this.health = Constants.TANK_MAX_HEALTH
       }
 
+     
+
       for(let i = 0 ; i < this.turret.active.length; i++){
 
 
@@ -71,22 +73,26 @@ class Tank {
 
   applyInput(data){
 
+    const dx = this.speed*Math.cos(this.theta*Math.PI/180.0)
+    const dy = this.speed*Math.sin(this.theta*Math.PI/180.0)
+    
+
     if(this.health <= 0) return //don't apply input until the player health is restored
 
-    if(data.forward){//w key 
-      this.centerX += this.speed*Math.cos(this.theta*Math.PI/180.0)
-      this.centerY += this.speed*Math.sin(this.theta*Math.PI/180.0)
+    if(data.forward && !this.hitbox.isOutsideGamescreen(0,0,Constants.WIDTH, Constants.HEIGHT, this, dx, dy)){//w key 
+        this.centerX += dx
+        this.centerY += dy
     }
-    if(data.back){//s key TANK_THETA: 0.0,
-        this.centerX -= this.speed*Math.cos(this.theta*Math.PI/180.0)
-        this.centerY -= this.speed*Math.sin(this.theta*Math.PI/180.0)
+    if(data.back && !this.hitbox.isOutsideGamescreen(0,0,Constants.WIDTH, Constants.HEIGHT, this, -dx, -dy)){//s key TANK_THETA: 0.0,
+        this.centerX -= dx
+        this.centerY -= dy
     }
-    if(data.turnLeft){// a key 
+    if(data.turnLeft && !this.hitbox.isOutsideGamescreen(0,0,Constants.WIDTH, Constants.HEIGHT, this,0,0,-this.dTheta)){// a key 
         //update x,y coordinates in rotation math
         this.theta -= this.dTheta
         this.theta %= 360.0
     }
-    if(data.turnRight){// d key 
+    if(data.turnRight && !this.hitbox.isOutsideGamescreen(0,0,Constants.WIDTH, Constants.HEIGHT, this,0,0,this.dTheta)){// d key 
         //update x,y coordinates with rotation math
         this.theta += this.dTheta
         this.theta %= 360.0

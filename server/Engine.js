@@ -45,15 +45,16 @@ class Engine{
 
     createPlayer(socket, name){
         if(this.gameData.get('allied') + this.gameData.get('axis') < this.gameData.get('max')){
+            const delta = this.gameData.get('max') - (this.gameData.get('allied') + this.gameData.get('axis'))
 			if(this.gameData.get('allied') <= this.gameData.get('axis')){
 				this.players.set(socket.id,new Player(Constants.TANK_DEFAULT_CENTER_X,1.125*Constants.TANK_DEFAULT_CENTER_Y,'black','grey', name))
 				this.gameData.set('allied', this.gameData.get('allied')+1)
-                socket.emit(Constants.SOCKET_MSG, 'Allied tank')
+                socket.emit(Constants.SOCKET_MSG, `Allied tank. Please wait for ${delta} more players to join.`)
 			}
 			else{
 				this.players.set(socket.id, new Player(Constants.TANK_DEFAULT_CENTER_X,0.375*Constants.TANK_DEFAULT_CENTER_Y,'brown','green', name))
 				this.gameData.set('axis', this.gameData.get('axis')+1)
-				socket.emit(Constants.SOCKET_MSG, 'Axis tank')
+				socket.emit(Constants.SOCKET_MSG, `Axis tank. Please wait for ${delta} more players to join.`)
             }
 		}
 		else{
