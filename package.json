@@ -1,7 +1,7 @@
 {
   "name": "TankHero",
   "version": "1.0.0",
-  "description": "",
+  "description": "Tank player videogame created with WebSockets",
   "main": "server.js",
   "directories": {
     "lib": "lib"
