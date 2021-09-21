@@ -19,8 +19,7 @@ const game = new Engine()
 
 
 const PORT = process.env.PORT || Constants.PORT
-const FRAME_RATE = 1000 / Constants.FPS //60 fps
-
+const FRAME_RATE = 1000 / Constants.FPS // (1000 ms / s ) * (1 / 60 s/frame) = 1000/60 ms / frame
 
 
 app.set('port',PORT)
@@ -74,7 +73,7 @@ setInterval(()=>{  //we have to update the bullets and also handle the logic if 
 
 	sum += dT
 
-	if(Math.abs(sum - 1000) < dT) {
+	if(Math.abs(sum - 1000) < dT) { // this helps keep track of the fps 
 		console.log('sum', sum, 'frames', count)
 		sum = 0 
 		count = 0
